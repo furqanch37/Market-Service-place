@@ -121,12 +121,12 @@ const BuyerHome = () => {
             </div>
             <div className="task-button"><FiCreditCard /> Add billing method</div>
             <div className="task-button"><FiUsers /> Explore more talent</div>
-            <div className="task-button"><FiFolder /> Explore projects</div>
+            <div className="task-button"><FiFolder /> Explore services</div>
           </div>
 
           <div className="card">
             <div className="card-header">
-              <h3>Ready-to-buy projects</h3>
+              <h3>Ready-to-buy services</h3>
             </div>
             <p className="project-text">
               Know what you need but not how to get it done? Buy a project priced and scoped for success.
