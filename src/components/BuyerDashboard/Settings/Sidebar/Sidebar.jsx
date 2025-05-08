@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaUser, FaLock, FaCalendarAlt, FaBuilding, FaLink as FaLinkIcon } from 'react-icons/fa';
 import "../Billing/billing.css";
+import "../InfoSettings/InfoSettings.css";
 
 const Sidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { path: '/buyer/settings/myinfo', icon: <FaUser />, label: 'My info' },
+    { path: '/buyer/settings/InfoSettings', icon: <FaUser />, label: 'My info' },
     { path: '/buyer/settings/billing', icon: <FaBuilding />, label: 'Billing & Payments' },
     { path: '/buyer/settings/security', icon: <FaLock />, label: 'Password & Security' },
     { path: '/buyer/settings/reviews', icon: <FaCalendarAlt />, label: 'My Reviews' },
