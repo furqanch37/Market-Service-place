@@ -32,10 +32,14 @@ const Navbar = () => {
        <div className="navbar-actions">
        <div className="nav-icon"><FiHeart /></div>
 
-<div className="nav-icon notification-icon">
-  <FiBell />
-  <span className="red-dot" />
-</div>
+       <Link href="/notifications" passHref>
+  <div className="nav-icon notification-icon" style={{ cursor: 'pointer' }}>
+    <FiBell />
+    <span className="red-dot" />
+  </div>
+</Link>
+
+
       <div className="user-avatar-wrapper-nav" onClick={() => setOpen(!open)}>
         <img src="/assets/myimg.jpg" alt="User" className="user-avatar-nav" />
       </div>
