@@ -5,8 +5,8 @@ import { FiCreditCard, FiUsers } from "react-icons/fi";
 
 const Notifications = () => {
   return (
-    <div className="notifications-wrapper">
-      <div className="card notifications-card">
+    <div className="notifications-wrapper-buyer">
+      <div className="card notifications-card-buyer">
         <div className="card-header notificationHeader">
           <h3>Notifications</h3>
         </div>

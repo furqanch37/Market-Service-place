@@ -1,46 +1,43 @@
-.notifications-wrapper {
+.notifications-wrapper-buyer {
   padding: 30px 10%;
   background-color: #fff;
   color: #333;
+  padding-top: 10px;
 }
 
-.card {
+.notifications-wrapper-buyer .card {
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.card-header {
+.notifications-wrapper-buyer .card-header {
   margin-bottom: 10px;
 }
 
-.card-header h3 {
+.notifications-wrapper-buyer .card-header h3 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  margin-bottom: 25px;
 }
 
-.notifications-card {
+.notifications-wrapper-buyer .notifications-card-buyer {
   overflow-x: hidden; /* Prevent horizontal scroll */
   padding-bottom: 10px;
 }
 
 
-.notification-item {
-  border-left: 4px solid transparent;
+.notifications-wrapper-buyer .notification-item {
   padding: 10px 0 10px 10px;
   border-radius: 8px;
   margin-bottom: 10px;
-  background: #fff;
+  background: #f9fafb;
   word-wrap: break-word;
-  /* border-bottom: 1px solid #000000; */
-  border: 1px solid #656565;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.01);
+ 
 }
 
-.notification-item .notif-title {
+.notifications-wrapper-buyer .notification-item .notif-title {
   display: flex;
   align-items: center;
   font-size: 15px;
@@ -48,23 +45,23 @@
   color: #333;
 }
 
-.notification-item p {
+.notifications-wrapper-buyer .notification-item p {
   margin: 5px 0;
   font-size: 14px;
   color: #555;
 }
 
-.notification-item a {
+.notifications-wrapper-buyer .notification-item a {
   color: #00b22d;
   text-decoration: none;
 }
 
-.notification-item .notif-time {
+.notifications-wrapper-buyer .notification-item .notif-time {
   font-size: 13px;
   color: #999;
 }
 
-.see-all {
+.notifications-wrapper-buyer .see-all {
   display: block;
   text-align: center;
   font-weight: bold;
