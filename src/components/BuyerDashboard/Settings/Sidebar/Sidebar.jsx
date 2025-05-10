@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaUser, FaLock, FaCalendarAlt, FaBuilding, FaLink as FaLinkIcon } from 'react-icons/fa';
 import "../Billing/billing.css";
+import "../LinkedAccounts/linkedaccounts.css";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ const Sidebar = () => {
     { path: '/buyer/settings/billing', icon: <FaBuilding />, label: 'Billing & Payments' },
     { path: '/buyer/settings/reset-password', icon: <FaLock />, label: 'Password & Security' },
     { path: '/buyer/settings/reviews', icon: <FaCalendarAlt />, label: 'My Reviews' },
-    { path: '/buyer/settings/connected', icon: <FaLinkIcon />, label: 'Connected Accounts' },
+    { path: '/buyer/settings/linkedaccounts', icon: <FaLinkIcon />, label: 'Linked Accounts' },
   ];
 
   return (
