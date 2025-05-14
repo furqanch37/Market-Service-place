@@ -1,14 +1,11 @@
-'use client'; // Required when using hooks like useRouter in App Router
+'use client';
 
 import React from 'react';
-import { useRouter } from 'next/navigation'; // ✅ Correct for App Router
 import './gigform.css';
 
-const GigForm = () => {
-  const router = useRouter();
-
+const GigForm = ({ goToNextStep }) => {
   const handleSaveAndContinue = () => {
-    router.push('/scope-pricing'); // Navigates to ScopePricing page
+    goToNextStep(); // just switch step inside Navbar
   };
 
   return (

@@ -1,14 +1,87 @@
 'use client';
-import { useRouter } from "next/navigation";
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import './scopepricing.css';
 
 const ScopePricing = () => {
   const router = useRouter();
 
+  const [formData, setFormData] = useState({
+    packages: {
+      basic: {
+        name: '', description: '', deliveryTime: '', 
+        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
+        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+      },
+      standard: {
+        name: '', description: '', deliveryTime: '',
+        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
+        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+      },
+      premium: {
+        name: '', description: '', deliveryTime: '', 
+        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
+        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+      },
+    },
+    extras: {
+      fastDelivery: false,
+      additionalPage: false,
+      sourceCode: false,
+      designCustomization: false,
+    },
+  });
+
+  const [charCount, setCharCount] = useState({ basic: 0, standard: 0, premium: 0 });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const [section, pkg, key] = name.split('.');
+
+    if (section === 'packages') {
+      setFormData((prevState) => ({
+        ...prevState,
+        packages: {
+          ...prevState.packages,
+          [pkg]: {
+            ...prevState.packages[pkg],
+            [key]: type === 'checkbox' ? checked : value,
+          },
+        },
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [section]: {
+          ...prevState[section],
+          [pkg]: type === 'checkbox' ? checked : value,
+        },
+      }));
+    }
+  };
+
+  const handleDescriptionChange = (pkg, e) => {
+    const newDescription = e.target.innerText;
+    const newCharCount = newDescription.length;
+    setFormData((prevState) => ({
+      ...prevState,
+      packages: {
+        ...prevState.packages,
+        [pkg]: {
+          ...prevState.packages[pkg],
+          description: newDescription,
+        },
+      },
+    }));
+    setCharCount((prevState) => ({
+      ...prevState,
+      [pkg]: newCharCount,
+    }));
+  };
+
   const handleContinue = () => {
-    // Navigate to the desired page
-    router.push("/description"); // 🔁 Replace with your route
+    router.push('/description');
   };
 
   return (
@@ -23,66 +96,87 @@ const ScopePricing = () => {
               <th>Standard</th>
               <th>Premium</th>
             </tr>
+            
           </thead>
           <tbody>
-            <tr>
-              <td>Package Name</td>
-              <td><input placeholder="Name your package" /></td>
-              <td><input placeholder="Name your package" /></td>
-              <td><input placeholder="Name your package" /></td>
-            </tr>
+  <tr>
+    <td>Package Name</td>
+    {['basic', 'standard', 'premium'].map((pkg) => (
+      <td key={`name-${pkg}`}>
+        <input
+          name={`packages.${pkg}.name`}
+          value={formData.packages[pkg].name}
+          onChange={handleChange}
+          placeholder="Name your package"
+        />
+      </td>
+    ))}
+  </tr>
+
+            
+
             <tr>
               <td>Description</td>
-              <td><textarea placeholder="Describe your offering" /></td>
-              <td><textarea placeholder="Describe your offering" /></td>
-              <td><textarea placeholder="Describe your offering" /></td>
-            </tr>
-            <tr>
-              <td>Delivery Time</td>
-              {[...Array(3)].map((_, i) => (
-                <td key={i}>
-                  <select>
-                    {[...Array(10)].map((_, j) => (
-                      <option key={j + 1}>{j + 1} day{j + 1 > 1 ? 's' : ''}</option>
-                    ))}
-                    <option>Unlimited</option>
-                  </select>
+              {['basic', 'standard', 'premium'].map((pkg) => (
+                <td key={`desc-${pkg}`}>
+                  <div
+                    className="editor-box"
+                    contentEditable
+                    placeholder="Describe your offering"
+                    onInput={(e) => handleDescriptionChange(pkg, e)}
+                    dangerouslySetInnerHTML={{ __html: formData.packages[pkg].description }}
+                  />
+                  <div className="char-count">{charCount[pkg]}/1200 Characters</div>
                 </td>
               ))}
             </tr>
-            <tr>
-              <td>Responsive Design</td>
-              {[...Array(3)].map((_, i) => (
-                <td key={i}><input type="checkbox" /></td>
-              ))}
-            </tr>
-            <tr>
-              <td>Include Source Code</td>
-              {[...Array(3)].map((_, i) => (
-                <td key={i}><input type="checkbox" /></td>
-              ))}
-            </tr>
-            <tr>
-              <td>Price ($)</td>
-              {[...Array(3)].map((_, i) => (
-                <td key={i}><input type="number" /></td>
-              ))}
-            </tr>
+
+            {["price", "deliveryTime", "revisions", "pages"].map((field) => (
+              <tr key={field}>
+                <td>{field === 'price' ? 'Price ($)' : field === 'deliveryTime' ? 'Delivery Time (days)' : field === 'revisions' ? 'Revisions' : 'Number of Pages'}</td>
+                {['basic', 'standard', 'premium'].map((pkg) => (
+                  <td key={`${field}-${pkg}`}>
+                    <input
+                      type="number"
+                      name={`packages.${pkg}.${field}`}
+                      value={formData.packages[pkg][field]}
+                      onChange={handleChange}
+                      placeholder={field}
+                      min="0"
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+
+            {["responsiveDesign", "contentUpload", "paymentIntegration", "socialIcons"].map((field) => (
+              <tr key={field}>
+                <td>{field.replace(/([A-Z])/g, ' $1')}</td>
+                {['basic', 'standard', 'premium'].map((pkg) => (
+                  <td key={`${field}-${pkg}`}>
+                    <input
+                      type="checkbox"
+                      name={`packages.${pkg}.${field}`}
+                      checked={formData.packages[pkg][field]}
+                      onChange={handleChange}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
       <div className="extras">
         <h3>Add Extra Services</h3>
-        <label><input type="checkbox" /> Extra Fast Delivery</label>
-        <label><input type="checkbox" /> Additional Page</label>
-        <label><input type="checkbox" /> Include Source Code</label>
-        <label><input type="checkbox" /> Design Customization</label>
+        <label><input name="extras.fastDelivery" type="checkbox" checked={formData.extras.fastDelivery} onChange={handleChange} /> Extra Fast Delivery</label>
+        <label><input name="extras.additionalPage" type="checkbox" checked={formData.extras.additionalPage} onChange={handleChange} /> Additional Page</label>
+        <label><input name="extras.sourceCode" type="checkbox" checked={formData.extras.sourceCode} onChange={handleChange} /> Include Source Code</label>
+        <label><input name="extras.designCustomization" type="checkbox" checked={formData.extras.designCustomization} onChange={handleChange} /> Design Customization</label>
       </div>
 
-      <button className="submit-btn" onClick={handleContinue}>
-        Save & Continue
-      </button>
+      <button className="submit-btn" onClick={handleContinue}>Save & Continue</button>
     </div>
   );
 };
