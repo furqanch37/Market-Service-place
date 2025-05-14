@@ -31,7 +31,7 @@
 }
 
 .publish-btn {
-  background-color: #32cc32;
+  background-color: #3a4a7a;
   color: white;
   font-size: 1.1rem;
   padding: 10px 20px;
@@ -43,7 +43,7 @@
 }
 
 .publish-btn:hover {
-  background-color: #28a828;
+  background-color: #3a4a7a;
 }
 
 .back-btn {

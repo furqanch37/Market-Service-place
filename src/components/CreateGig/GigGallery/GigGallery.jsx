@@ -3,11 +3,7 @@
 import React from 'react';
 import './GigGallery.css';
 
-const GigGallery = ({ goToNextStep, goToPrevStep }) => {
-  const handleSaveAndContinue = () => {
-    goToNextStep(); // Just move to the next step
-  };
-
+const GigGallery = () => {
   return (
     <div className="gig-gallery-container">
       <h2>Showcase Your Services In A Gig Gallery</h2>
@@ -54,10 +50,10 @@ const GigGallery = ({ goToNextStep, goToPrevStep }) => {
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Static Navigation */}
       <div className="btn-row">
-        <button className="back-btn" onClick={goToPrevStep}>Back</button>
-        <button className="save-btn" onClick={handleSaveAndContinue}>Save & Continue</button>
+        <button className="back-btn" onClick={() => console.log("Back clicked")}>Back</button>
+        <button className="save-btn" onClick={() => console.log("Saved gallery")}>Save & Continue</button>
       </div>
     </div>
   );

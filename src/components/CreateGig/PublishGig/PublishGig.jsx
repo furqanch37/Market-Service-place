@@ -1,15 +1,17 @@
-'use client'; // Ensure this is a Client Component
+'use client'; // This remains since you're using stateful logic or may later enhance
 
 import React from 'react';
-import { useRouter } from 'next/navigation'; // ✅ Correct router import
 import './PublishGig.css';
 
 const PublishGig = () => {
-  const router = useRouter();
-
   const handlePublish = () => {
     console.log('Gig Published!');
-    router.push('/gig-success'); // Navigate to success page or confirmation page
+    // Navigation removed — you can trigger a modal, toast, or other feedback here
+  };
+
+  const handleBack = () => {
+    console.log('Back clicked');
+    // Optionally trigger state rollback or UI step switch
   };
 
   return (
@@ -18,12 +20,12 @@ const PublishGig = () => {
         <h2>Almost there...</h2>
         <p>Let's publish your Gig and get some buyers rolling in.</p>
         <div className="btn-div">
-        <button className="publish-btn" onClick={handlePublish}>
-          Publish Gig
-        </button>
-        <button className="back-btn" onClick={() => router.back()}>
-          Back
-        </button>
+          <button className="publish-btn" onClick={handlePublish}>
+            Publish Gig
+          </button>
+          <button className="back-btn" onClick={handleBack}>
+            Back
+          </button>
         </div>
       </div>
     </div>

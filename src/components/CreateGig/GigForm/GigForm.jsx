@@ -3,11 +3,7 @@
 import React from 'react';
 import './gigform.css';
 
-const GigForm = ({ goToNextStep }) => {
-  const handleSaveAndContinue = () => {
-    goToNextStep(); // just switch step inside Navbar
-  };
-
+const GigForm = () => {
   return (
     <div className="gig-form-container">
       <h2 className="section-title">Gig Overview</h2>
@@ -59,9 +55,11 @@ const GigForm = ({ goToNextStep }) => {
 
       <p className="note-text">⚠️ Please note: Some categories require that sellers verify their skills.</p>
 
-      <button className="save-btn" onClick={handleSaveAndContinue}>
-        Save & Continue
-      </button>
+      <div className="submit-container-1">
+        <button className="submit-btn-1">
+          Save & Continue
+        </button>
+      </div>
     </div>
   );
 };

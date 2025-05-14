@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import './DescriptionEditor.css';
 
-const DescriptionEditor = ({ goToNextStep }) => {
+const DescriptionEditor = () => {
   const [charCount, setCharCount] = useState(0);
 
   const handleContentChange = (e) => {
@@ -20,21 +20,11 @@ const DescriptionEditor = ({ goToNextStep }) => {
         </label>
 
         <div className="editor-toolbar">
-          <button type="button" title="Bold">
-            <b>B</b>
-          </button>
-          <button type="button" title="Italic">
-            <i>I</i>
-          </button>
-          <button type="button" title="Underline">
-            <u>U</u>
-          </button>
-          <button type="button" title="Bullet List">
-            •
-          </button>
-          <button type="button" title="Number List">
-            1.
-          </button>
+          <button type="button" title="Bold"><b>B</b></button>
+          <button type="button" title="Italic"><i>I</i></button>
+          <button type="button" title="Underline"><u>U</u></button>
+          <button type="button" title="Bullet List">•</button>
+          <button type="button" title="Number List">1.</button>
         </div>
 
         <div
@@ -47,9 +37,12 @@ const DescriptionEditor = ({ goToNextStep }) => {
 
         <div className="char-count">{charCount}/1200 Characters</div>
       </div>
-      <button className="submit-btn" onClick={goToNextStep}>
-        Save & Continue
-      </button>
+
+      <div className="submit-container">
+        <button className="back-btn" onClick={() => console.log("Back clicked")}>Back</button>
+        <button className="submit-btn" onClick={() => console.log("Saved gallery")}>Save & Continue</button>
+      </div>
+  
     </div>
   );
 };

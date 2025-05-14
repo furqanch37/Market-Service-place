@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import './scopepricing.css';
 
 const ScopePricing = () => {
-  const router = useRouter();
-
   const [formData, setFormData] = useState({
     packages: {
       basic: {
@@ -81,7 +78,8 @@ const ScopePricing = () => {
   };
 
   const handleContinue = () => {
-    router.push('/description');
+    // No navigation; static action
+    console.log('Save & Continue clicked');
   };
 
   return (
@@ -96,24 +94,21 @@ const ScopePricing = () => {
               <th>Standard</th>
               <th>Premium</th>
             </tr>
-            
           </thead>
           <tbody>
-  <tr>
-    <td>Package Name</td>
-    {['basic', 'standard', 'premium'].map((pkg) => (
-      <td key={`name-${pkg}`}>
-        <input
-          name={`packages.${pkg}.name`}
-          value={formData.packages[pkg].name}
-          onChange={handleChange}
-          placeholder="Name your package"
-        />
-      </td>
-    ))}
-  </tr>
-
-            
+            <tr>
+              <td>Package Name</td>
+              {['basic', 'standard', 'premium'].map((pkg) => (
+                <td key={`name-${pkg}`}>
+                  <input
+                    name={`packages.${pkg}.name`}
+                    value={formData.packages[pkg].name}
+                    onChange={handleChange}
+                    placeholder="Name your package"
+                  />
+                </td>
+              ))}
+            </tr>
 
             <tr>
               <td>Description</td>
@@ -133,7 +128,11 @@ const ScopePricing = () => {
 
             {["price", "deliveryTime", "revisions", "pages"].map((field) => (
               <tr key={field}>
-                <td>{field === 'price' ? 'Price ($)' : field === 'deliveryTime' ? 'Delivery Time (days)' : field === 'revisions' ? 'Revisions' : 'Number of Pages'}</td>
+                <td>
+                  {field === 'price' ? 'Price ($)' :
+                   field === 'deliveryTime' ? 'Delivery Time (days)' :
+                   field === 'revisions' ? 'Revisions' : 'Number of Pages'}
+                </td>
                 {['basic', 'standard', 'premium'].map((pkg) => (
                   <td key={`${field}-${pkg}`}>
                     <input
@@ -170,13 +169,44 @@ const ScopePricing = () => {
 
       <div className="extras">
         <h3>Add Extra Services</h3>
-        <label><input name="extras.fastDelivery" type="checkbox" checked={formData.extras.fastDelivery} onChange={handleChange} /> Extra Fast Delivery</label>
-        <label><input name="extras.additionalPage" type="checkbox" checked={formData.extras.additionalPage} onChange={handleChange} /> Additional Page</label>
-        <label><input name="extras.sourceCode" type="checkbox" checked={formData.extras.sourceCode} onChange={handleChange} /> Include Source Code</label>
-        <label><input name="extras.designCustomization" type="checkbox" checked={formData.extras.designCustomization} onChange={handleChange} /> Design Customization</label>
+        <label>
+          <input
+            name="extras.fastDelivery"
+            type="checkbox"
+            checked={formData.extras.fastDelivery}
+            onChange={handleChange}
+          /> Extra Fast Delivery
+        </label>
+        <label>
+          <input
+            name="extras.additionalPage"
+            type="checkbox"
+            checked={formData.extras.additionalPage}
+            onChange={handleChange}
+          /> Additional Page
+        </label>
+        <label>
+          <input
+            name="extras.sourceCode"
+            type="checkbox"
+            checked={formData.extras.sourceCode}
+            onChange={handleChange}
+          /> Include Source Code
+        </label>
+        <label>
+          <input
+            name="extras.designCustomization"
+            type="checkbox"
+            checked={formData.extras.designCustomization}
+            onChange={handleChange}
+          /> Design Customization
+        </label>
       </div>
 
-      <button className="submit-btn" onClick={handleContinue}>Save & Continue</button>
+      <div className="submit-container">
+        <button className="back-btn" onClick={() => console.log("Back clicked")}>Back</button>
+        <button className="submit-btn" onClick={() => console.log("Saved gallery")}>Save & Continue</button>
+      </div>
     </div>
   );
 };
