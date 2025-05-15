@@ -7,15 +7,23 @@ import MessageProfile from './MessageProfile';
 import { useRouter } from 'next/navigation';
 
 const Messages = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+  const [isMobile, setIsMobile] = useState(null);
+
   const router = useRouter();
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
+useEffect(() => {
+  const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+  checkMobile();
+  window.addEventListener("resize", checkMobile);
+  return () => window.removeEventListener("resize", checkMobile);
+}, []);
+
+if (isMobile === null) {
+  // Optionally render a loading state or nothing
+  return null;
+}
   const handleImageClick = (e) => {
     if (isMobile) {
       e.stopPropagation(); // prevent container click from firing
@@ -32,10 +40,10 @@ const Messages = () => {
   return (
     <div className="messages-container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <h1 className="sidebar-title">Messages</h1>
-        <div className="searchBarWrapper">
-          <div className="search-bar">
+      <div className="sidebar-messages">
+        <h1 className="sidebar-title-messages">Messages</h1>
+        <div className="searchBarWrapper-messages">
+          <div className="search-bar-messages">
             <FaSearch />
             <input type="text" placeholder="Search" />
           </div>
@@ -43,27 +51,27 @@ const Messages = () => {
         </div>
 
         <div className="usersInMessagesWrapper">
-          <div className="contact active" onClick={handleContactClick}>
+          <div className="contact-messages active-messages" onClick={handleContactClick}>
             <img
               src="/assets/users/one.png"
               alt="Amina"
               onClick={handleImageClick}
             />
-            <div className="contact-info">
+            <div className="contact-info-messages">
               <h4>Amina Okonkwo</h4>
               <p>Data Analyst – E-commerce Insights</p>
             </div>
             <span className="timestamp">12:02 AM</span>
           </div>
 
-          <div className="contact" onClick={handleContactClick}>
+          <div className="contact-messages" onClick={handleContactClick}>
             <img
               src="/assets/users/one.png"
               alt="Amina"
               onClick={handleImageClick}
             />
-            <div className="contact-info">
-              <h4>Amina Okonkwo</h4>
+            <div className="contact-info-messages">
+              <h4>Amina Okonkwos</h4>
               <p>Data Analyst – E-commerce Insights</p>
             </div>
             <span className="timestamp">12:02 AM</span>

@@ -5,29 +5,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaUser, FaCog, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
 import { FiHeart, FiBell } from 'react-icons/fi';
+import { FiMessageSquare } from "react-icons/fi";
+import SearchBar from './Search/SearchBar';
+import MessagePopup from './MessagePopup/MessagePopup';
+import NotificationPopup from './NotificationPopup/NotificationPopup';
+import SubNavbar from './SubNavbar/SubNavbar';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+ const [showPopup, setShowPopup] = useState(false);
 
   return (
     <>
       <nav className="navbar">
         <div className="navSecOne">
-          <Link href="/">
+          <Link href="/seller/dashboard">
             <div className="navbar-logo">
-              <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
+              <Image src="/assets/logo.png" alt="logo" width={50} height={50} style={{objectFit:'cover', width:'60px', height:'auto', borderRadius:'50%'}} />
             </div>
           </Link>
              <ul className="navbar-menu">
-        <Link href="/buyer/dashboard" className='navLink'><li className="navbar-item">Dashboard</li>
+        <Link href="/seller/dashboard" className='navLink'><li className="navbar-item">Dashboard</li>
         </Link>
        <Link href="/buyer/orders" className='navLink'> <li className="navbar-item">Orders</li>
        </Link>
-       <Link href="/services" className='navLink'> <li className="navbar-item">Services</li>
+       <Link href="/seller/services" className='navLink'> <li className="navbar-item">Services</li>
        </Link>
-       
-       <Link href="/messages" className='navLink'> <li className="navbar-item">Messages</li>
+       <Link href="/seller/earnings" className='navLink'> <li className="navbar-item">Earnings</li>
        </Link>
        
        <Link href="/buyer/settings/billing" className='navLink'> <li className="navbar-item">Billing</li>
@@ -40,13 +46,26 @@ const Navbar = () => {
             <FaBars size={22} />
           </div>
           <div className="navbar-actions">
-            <Link href="/buyer/liked-services"><div className="nav-icon"><FiHeart /></div></Link>
-            <Link href="/buyer/notifications">
-              <div className="nav-icon notification-icon">
-                <FiBell />
-                <span className="red-dot" />
-              </div>
-            </Link>
+          
+        <div className="nav-message-container">
+      <div className="nav-icon" onClick={() => setShowPopup(!showPopup)}>
+        <FiMessageSquare />
+      </div>
+      {showPopup && <MessagePopup closePopup={() => setShowPopup(false)} />}
+    </div>
+         
+             <div className="nav-message-container">
+      <div
+        className="nav-icon notification-icon"
+        onClick={() => setShowNotificationPopup(!showNotificationPopup)}
+      >
+        <FiBell />
+        <span className="red-dot" />
+      </div>
+      {showNotificationPopup && (
+        <NotificationPopup closePopup={() => setShowNotificationPopup(false)} />
+      )}
+    </div>
             <div className="user-avatar-wrapper-nav" onClick={() => setDropdownOpen(!dropdownOpen)}>
               <img src="/assets/myimg.jpg" alt="User" className="user-avatar-nav" />
             </div>
@@ -64,7 +83,7 @@ const Navbar = () => {
                 </div>
                 <ul className="dropdown-links-user">
                   <Link href="/profile" onClick={() => setDropdownOpen(false)}><li><FaUser /> Profile</li></Link>
-                  <Link href="/buyer/settings/billing" onClick={() => setDropdownOpen(false)}><li><FaCog /> Settings</li></Link>
+                  <Link href="/buyer/settings/myinfo" onClick={() => setDropdownOpen(false)}><li><FaCog /> Settings</li></Link>
                   <Link href="/" onClick={() => setDropdownOpen(false)}><li><FaSignOutAlt /> Log out</li></Link>
                 </ul>
               </div>
@@ -72,6 +91,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+      
 {menuOpen && (
   <div className="mobile-menu">
     <div className="mobile-menu-header">
@@ -91,13 +111,13 @@ const Navbar = () => {
     </div>
 
     <ul className="mobile-nav-links">
-      <Link href="/buyer/dashboard" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
+      <Link href="/" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Dashboard</li>
       </Link>
       <Link href="/buyer/orders" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Orders</li>
       </Link>
-      <Link href="/services" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
+      <Link href="/seller/services" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Services</li>
       </Link>
       <Link href="/messages" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
@@ -106,8 +126,8 @@ const Navbar = () => {
       <Link href="/buyer/settings/billing" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Billing</li>
       </Link>
-      <Link href="/buyer/liked-services" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
-        <li className="mobile-nav-item">Liked Services</li>
+      <Link href="/seller/earnings" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
+        <li className="mobile-nav-item">Earnings</li>
       </Link>
       <Link href="/buyer/notifications" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Notifications</li>

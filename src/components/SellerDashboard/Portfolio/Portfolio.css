@@ -1,0 +1,155 @@
+
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.main-title {
+  font-size: 2.8rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  margin: auto;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+  margin: auto;
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filter-bar button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.filter-bar button.active {
+  background: #000;
+  color: #fff;
+}
+
+.filter-bar .popular-btn {
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  font-weight: 500;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.filter-bar .popular-btn:hover {
+  background-color: #f7f7f7;
+  border-color: #888;
+}
+
+.card-row-seller-portfolio {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  scroll-behavior: smooth;
+flex-wrap: wrap;
+justify-content: center;
+align-items: center;
+width: 100%;
+}
+
+.card {
+  min-width: 280px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem;
+  flex-shrink: 0;
+}
+
+.card-img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  color: #555;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .card {
+    min-width: 240px;
+  }
+
+  .filter-bar {
+    align-items: center;
+  }
+  .card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+}.portfolio-showcase {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.portfolio-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.portfolio-iframe {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.view-website-button {
+  margin-top: 10px;
+  text-decoration: none;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.view-website-button:hover {
+  background-color: #0056b3;
+}
+
