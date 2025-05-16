@@ -3,80 +3,112 @@ import { useRouter } from 'next/navigation';
 import './Orders.css';
 
 export default function ManageOrders() {
-    const router = useRouter();
-  
-    const handleClick = () => {
-      router.push('/buyer/order-details');
-    };
-  
-  const orders = [
+  const router = useRouter();
+
+  const requests = [
     {
       id: 1,
-      image: '/assets/mastercard.png',
-      title: 'do geostatistics analysis with qgis, arcgis and rstudio',
-      orderDate: 'Apr 13, 2024',
-      dueDate: 'Apr 16, 2024',
-      price: '$7.78',
+      title: 'Photo shoot for national campaign',
+      company: 'Acme Company',
+      time: '10 minutes ago',
+      status: 'Pending',
+      budget: '$10,000.00',
     },
     {
       id: 2,
-      image: '/assets/mastercard.png',
-      title: 'do a species distribution map via maxent and divagis',
-      orderDate: 'Apr 03, 2024',
-      dueDate: 'Apr 04, 2024',
-      price: '$9.89',
+      title: 'Brand refresh of marketing campaign',
+      company: 'Acme Company',
+      time: '10 minutes ago',
+      status: 'Pending',
+      budget: '$27,500.00',
+    },
+    {
+      id: 3,
+      title: 'Subscription billing engine',
+      company: 'Acme Company',
+      time: '10 minutes ago',
+      status: 'Pending',
+      budget: '$5,000.00',
+    },
+    {
+      id: 4,
+      title: 'Salesforce integration implementation',
+      company: 'Acme Company',
+      time: '11 minutes ago',
+      status: 'Pending',
+      budget: '$34,000.00',
+    },
+    {
+      id: 5,
+      title: 'Product launch marketing campaign PEARL',
+      company: 'Acme Company',
+      time: '12 minutes ago',
+      status: 'Pending',
+      budget: '$10,000.00',
     },
   ];
 
   return (
-    
-    <div className='orders-container'>
-    <h1 className="title">Manage Orders</h1>
+    <div className="approvals-container">
+      <div className="approvals-header">
+        <h2>Orders</h2>
+      </div>
 
-      <div className="container">
-      
+      <div className="filters">
+        <input type="text" placeholder="Search by request title" />
+        <select>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+        <select>
+          <option>Requested...</option>
+        </select>
+        <select>
+          <option>All Teams</option>
+        </select>
+        <button className="clear-btn">Clear all filters</button>
+      </div>
 
-        <div className="tabs">
-          <span>ACTIVE</span>
-          <span>MISSING DETAILS</span>
-          <span>DELIVERED</span>
-          <span className="active-tab">
-            COMPLETED <span className="badge">2</span>
-          </span>
-          <span>
-            CANCELLED <span className="badge-grey">1</span>
-          </span>
-          <span>
-            ALL <span className="badge-grey">3</span>
-          </span>
+      <div className="request-table">
+        <div className="table-header">
+          <div className="col-request">Request</div>
+          <div className="col-status">Status</div>
+          <div className="col-time">Request Sent</div>
+          <div className="col-budget">Budget</div>
+          <div className="col-action"></div>
         </div>
 
-        <div className="order-list">
-          <h3>COMPLETED ORDERS</h3>
-
-          {/* Header Row */}
-          <div className="order-row" style={{ fontWeight: 'bold', color: '#666666', }}>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div>ORDER DATE</div>
-            <div>DUE ON</div>
-            <div>TOTAL</div>
-            <div>STATUS</div>
-          </div>
-
-          {orders.map((order) => (
-            <div key={order.id} className="order-row" onClick={handleClick} style={{cursor:'pointer'}}>
-              <img src={order.image} alt="Order" className="thumbnail" />
-              <div className="order-tag">CUSTOM ORDER</div>
-              <div className="order-title">{order.title}</div>
-              <div className="order-date">{order.orderDate}</div>
-              <div className="order-date">{order.dueDate}</div>
-              <div className="order-price">{order.price}</div>
-              <button className="order-btn">Order Again</button>
+        {requests.map((req) => (
+          <div
+            key={req.id}
+            className="table-row"
+            onClick={() => router.push('/buyer/order-details')}
+          >
+            <div className="col-request">
+              <div className="request-title">{req.title}</div>
+              <div className="company-name">{req.company}</div>
             </div>
-          ))}
-        </div>
+            <div className="col-status">
+              <span className="status-badge">{req.status}</span>
+            </div>
+            <div className="col-time">{req.time}</div>
+            <div className="col-budget">{req.budget}</div>
+            <div className="col-action">
+              <button className="view-btn" onClick={e => e.stopPropagation()}>
+                View Request
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="pagination">
+        <span>&laquo;</span>
+        <span className="active-page">1</span>
+        <span>2</span>
+        <span>3</span>
+        <span>&raquo;</span>
       </div>
     </div>
   );
