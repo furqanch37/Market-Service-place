@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaSearch, FaUserFriends, FaFileAlt, FaStickyNote } from 'react-icons/fa';
 import './Messages.css';
+import Link from 'next/link';
 const MessageProfile = () => {
   return (
   <div className="info-panel">
@@ -11,7 +12,7 @@ const MessageProfile = () => {
           <p className="time">🕒 6:41 PM CDT (4h ahead)</p>
   
           <div className="action-buttons">
-            <button className="view-proposal-btn">View profile</button>
+            <Link href="/buyer/profile" className="view-proposal-btn"> View profile</Link>
           </div>
   
           <div className="info-section">
