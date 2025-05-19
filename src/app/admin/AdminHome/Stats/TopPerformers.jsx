@@ -1,5 +1,6 @@
 import React from 'react';
 import './Dashboard.css';
+import { FiChevronDown } from "react-icons/fi";
 
 const data = [
   {
@@ -53,10 +54,12 @@ const TopPerformers = () => {
   return (
     <div className="tp-card">
       <div className="tp-header">
+        <div className="tp-header-2">
         <h3>Top Performers</h3>
         <p className="tp-subtitle">Best Employees</p>
+        </div>
         <select className="tp-dropdown">
-          <option>March 2024</option>
+          <option> March 2024 <FiChevronDown style={{ verticalAlign: "middle", marginLeft: "6px" }} /></option>
         </select>
       </div>
 
