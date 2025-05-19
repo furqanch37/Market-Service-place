@@ -5,14 +5,33 @@
   padding: 10px 4%;
   width: 100%;
   max-width: 1300px;
-  margin:0 auto;
+  margin: 0 auto;
   gap: 20px;
 }
 
-@media (max-width: 768px) {
+.statschart {
+  display: flex;
+  padding: 10px 4%;
+  width: 100%;
+  max-width: 1300px;
+  gap: 20px;
+}
+@media (max-width: 1024px) {
   .chartsdiv {
     flex-direction: column;
-    padding: 10px 5%;
     align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 5%;
+    gap: 30px;
+  }
+
+  .statschart {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 600px) {
+  .chartsdiv,
+  .statschart {
+    padding: 10px 3%;
   }
 }

@@ -100,8 +100,8 @@ const EarningsCards = () => {
 
         <div className="chart-line">
           <LineChart
-            width={400}
-            height={200}
+            width={340}
+            height={120}
             data={monthlyLineData}
             margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
           >
