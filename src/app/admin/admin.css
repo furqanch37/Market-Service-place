@@ -1,4 +1,18 @@
-.chartsdiv{
-    display: flex;
-    padding: 10px 4%;
+.chartsdiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4%;
+  width: 100%;
+  max-width: 1300px;
+  margin:0 auto;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .chartsdiv {
+    flex-direction: column;
+    padding: 10px 5%;
+    align-items: center;
+  }
 }

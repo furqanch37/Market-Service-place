@@ -2,69 +2,64 @@
 
 import React from "react";
 import {
-  Chart,
-  Axis,
-  Series,
-  Tooltip,
-  Line,
+  PieChart,
   Pie,
-} from "@tanstack/react-charts";
+  Cell,
+  Tooltip as RechartsTooltip,
+  Legend,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
+
 import { FiArrowUpRight, FiArrowDownRight } from "react-icons/fi";
 import { FaDollarSign } from "react-icons/fa";
 
 import "./EarningsCards.css";
 
-
 const yearlyData = [
-  {
-    label: "2024",
-    data: [{ primary: "2024", secondary: 80 }],
-  },
-  {
-    label: "2023",
-    data: [{ primary: "2023", secondary: 20 }],
-  },
+  { name: "2024", value: 80 },
+  { name: "2023", value: 20 },
 ];
 
+const COLORS = ["#0088FE", "#00C49F"];
+
 const monthlyLineData = [
-  {
-    label: "Monthly Earnings",
-    data: [
-      { primary: new Date(2024, 0, 1), secondary: 3000 },
-      { primary: new Date(2024, 1, 1), secondary: 2000 },
-      { primary: new Date(2024, 2, 1), secondary: 4500 },
-      { primary: new Date(2024, 3, 1), secondary: 3500 },
-      { primary: new Date(2024, 4, 1), secondary: 5000 },
-      { primary: new Date(2024, 5, 1), secondary: 4000 },
-    ],
-  },
+  { month: "Jan", earnings: 3000 },
+  { month: "Feb", earnings: 2000 },
+  { month: "Mar", earnings: 4500 },
+  { month: "Apr", earnings: 3500 },
+  { month: "May", earnings: 5000 },
+  { month: "Jun", earnings: 4000 },
 ];
 
 const EarningsCards = () => {
   return (
-    <div className="container">
+    <div className="container-earn">
       {/* Yearly Breakup Card */}
       <div className="card yearly">
         <div className="header">
           <h3>Yearly Breakup</h3>
           <div className="chart-pie">
-            <Chart
-              options={{
-                data: yearlyData,
-                primaryAxis: {
-                  getValue: (datum) => datum.primary,
-                },
-                secondaryAxis: {
-                  getValue: (datum) => datum.secondary,
-                  stacked: true,
-                },
-                series: {
-                  type: "pie",
-                },
-              }}
-            >
-              <Pie />
-            </Chart>
+            <PieChart width={200} height={200}>
+              <Pie
+                data={yearlyData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={70}
+                fill="#8884d8"
+                label
+              >
+                {yearlyData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <RechartsTooltip />
+            </PieChart>
           </div>
         </div>
 
@@ -99,25 +94,23 @@ const EarningsCards = () => {
           <h2>$6,820</h2>
           <div className="growth negative">
             <FiArrowDownRight />
-            <span>+9% last year</span>
+            <span>-9% last year</span>
           </div>
         </div>
 
         <div className="chart-line">
-          <Chart
-            options={{
-              data: monthlyLineData,
-              primaryAxis: {
-                getValue: (datum) => datum.primary,
-                scaleType: "time",
-              },
-              secondaryAxis: {
-                getValue: (datum) => datum.secondary,
-              },
-            }}
+          <LineChart
+            width={400}
+            height={200}
+            data={monthlyLineData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
           >
-            <Line />
-          </Chart>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <RechartsTooltip />
+            <Line type="monotone" dataKey="earnings" stroke="#8884d8" strokeWidth={2} />
+          </LineChart>
         </div>
       </div>
     </div>

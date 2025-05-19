@@ -1,10 +1,12 @@
-.container {
+.container-earn {
   display: flex;
   flex-direction: column;
   gap: 20px;
   max-width: 400px;
   margin: auto;
   padding: 1rem;
+  max-width: 400px;
+  width: 100%;
 }
 
 .card {
@@ -19,7 +21,6 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -34,7 +35,7 @@
 }
 
 .info h2 {
-  font-weight: 700;
+  font-weight: 300;
   font-size: 1.75rem;
   margin: 0;
 }
