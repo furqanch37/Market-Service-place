@@ -55,6 +55,48 @@
   color: #6c63ff;
   cursor: pointer;
 }
+.block-btn {
+  padding: 5px 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.block-btn.block {
+  background-color: #d9363e;
+  color: white;
+}
+
+.block-btn.unblock {
+  background-color: #4caf50;
+  color: white;
+}
+
+.block-btn:hover {
+  opacity: 0.8;
+}
+
+.delete-btn {
+  padding: 5px 10px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  background-color: #d9363e;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d9363e;
+  color: white;
+}
 
 @media (max-width: 768px) {
   .team-table {

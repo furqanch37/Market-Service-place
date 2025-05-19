@@ -1,8 +1,8 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import "./buyerdata.css";
-import { FaEye, FaTrash } from "react-icons/fa";
 
-const teamMembers = [
+const initialTeamMembers = [
   {
     name: "Emma Adams",
     role: "Web Developer",
@@ -70,6 +70,22 @@ const teamMembers = [
 ];
 
 const BuyerData = () => {
+  const [members, setMembers] = useState(
+    initialTeamMembers.map((member) => ({ ...member, isBlocked: false }))
+  );
+
+  const toggleBlock = (index) => {
+    const updatedMembers = [...members];
+    updatedMembers[index].isBlocked = !updatedMembers[index].isBlocked;
+    setMembers(updatedMembers);
+  };
+
+  const handleDelete = (index) => {
+    const updatedMembers = [...members];
+    updatedMembers.splice(index, 1);
+    setMembers(updatedMembers);
+  };
+
   return (
     <div className="table-wrapper">
       <table className="team-table">
@@ -80,10 +96,11 @@ const BuyerData = () => {
             <th>Location</th>
             <th>Phone</th>
             <th>Action</th>
+            <th>Block</th>
           </tr>
         </thead>
         <tbody>
-          {teamMembers.map((member, index) => (
+          {members.map((member, index) => (
             <tr key={index}>
               <td className="name-cell">
                 <img src={member.image} alt={member.name} className="avatar" />
@@ -95,9 +112,23 @@ const BuyerData = () => {
               <td>{member.email}</td>
               <td>{member.location}</td>
               <td>{member.phone}</td>
-              <td className="actions">
-                <FaEye className="icon" />
-                <FaTrash className="icon" />
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(index)}
+                >
+                  Delete
+                </button>
+              </td>
+              <td>
+                <button
+                  className={`block-btn ${
+                    member.isBlocked ? "unblock" : "block"
+                  }`}
+                  onClick={() => toggleBlock(index)}
+                >
+                  {member.isBlocked ? "Unblock" : "Block"}
+                </button>
               </td>
             </tr>
           ))}
