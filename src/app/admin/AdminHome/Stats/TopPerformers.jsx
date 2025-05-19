@@ -10,7 +10,7 @@ const data = [
     priority: 'Low',
     budget: '$3.9K',
     color: 'blue',
-    image: '/assets/user-3.jpeg',
+    image: '/assets/myimg.jpg',
   },
   {
     name: 'John Deo',
@@ -19,7 +19,7 @@ const data = [
     priority: 'Medium',
     budget: '$24.5K',
     color: 'orange',
-    image: '/assets/user-3.jpeg',
+    image: '/assets/myimg.jpg',
   },
   {
     name: 'Nirav Joshi',
@@ -28,7 +28,7 @@ const data = [
     priority: 'High',
     budget: '$12.8K',
     color: 'blue',
-    image: '/assets/user-3.jpeg',
+    image: '/assets/myimg.jpg',
   },
   {
     name: 'Yuvraj Sheth',
@@ -37,7 +37,7 @@ const data = [
     priority: 'Low',
     budget: '$4.8K',
     color: 'green',
-    image: '/assets/user-3.jpeg',
+    image: '/assets/myimg.jpg',
   },
   {
     name: 'Micheal Doe',
@@ -46,7 +46,7 @@ const data = [
     priority: 'High',
     budget: '$9.3K',
     color: 'red',
-    image:'/assets/user-3.jpeg',
+    image:'/assets/myimg.jpg',
   },
 ];
 
