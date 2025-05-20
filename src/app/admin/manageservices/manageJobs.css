@@ -1,0 +1,97 @@
+.manage-jobs-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.jobs-container-1{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.breadcrumb {
+  background-color: #222;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.job-card {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.status.pending-approval {
+  background-color: #d4f8d4;
+  color: #2e7d32;
+}
+
+.status.expiring {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.job-meta {
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0;
+}
+
+.job-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-icon {
+  background: #f1f1f1;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .job-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .job-actions {
+    flex-direction: column;
+  }
+}
