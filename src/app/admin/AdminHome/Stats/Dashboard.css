@@ -193,20 +193,27 @@
 }
 
 /* Responsive Enhancements */
+
+/* Tablet and below */
 @media (max-width: 768px) {
-  .ws-stats-list {
-    flex-direction: column;
+  .ws-card,
+  .tp-card {
+    padding: 15px;
   }
 
   .tp-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
   }
 
-  .tp-profile-info {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
+  .tp-title {
+    font-size: 18px;
+  }
+
+  .tp-dropdown {
+    margin-left: 0;
+    width: 100%;
   }
 
   .tp-table,
@@ -225,8 +232,8 @@
 
   .tp-table td {
     position: relative;
-    padding-left: 50%;
     border-bottom: 1px solid #eee;
+    text-align: center;
   }
 
   .tp-table td::before {
@@ -239,5 +246,75 @@
     font-weight: 600;
     color: #666;
     content: attr(data-label);
+  }
+
+  .tp-profile-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ws-stat-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .ws-icon {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .ws-chart {
+    height: 80px;
+    margin: 15px 0;
+  }
+
+  .ws-title {
+    font-size: 16px;
+  }
+
+  .ws-subtitle {
+    font-size: 13px;
+  }
+}
+
+/* Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .tp-card,
+  .ws-card {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .tp-title {
+    font-size: 16px;
+  }
+
+  .tp-dropdown {
+    font-size: 14px;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .tp-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .tp-avatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ws-chart {
+    height: 60px;
+  }
+
+  .ws-title {
+    font-size: 15px;
+  }
+
+  .ws-value {
+    font-size: 14px;
   }
 }
