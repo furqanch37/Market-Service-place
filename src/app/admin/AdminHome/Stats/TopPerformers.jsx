@@ -1,6 +1,7 @@
 import React from 'react';
 import './Dashboard.css';
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown } from 'react-icons/fi';
+
 
 const data = [
   {
@@ -46,7 +47,7 @@ const data = [
     priority: 'High',
     budget: '$9.3K',
     color: 'red',
-    image:'/assets/myimg.jpg',
+    image: '/assets/myimg.jpg',
   },
 ];
 
@@ -55,11 +56,11 @@ const TopPerformers = () => {
     <div className="tp-card">
       <div className="tp-header">
         <div className="tp-header-2">
-        <h3>Top Performers</h3>
-        <p className="tp-subtitle">Best Employees</p>
+          <h3>Top Performers</h3>
+          <p className="tp-subtitle">Best Employees</p>
         </div>
         <select className="tp-dropdown">
-          <option> March 2024 <FiChevronDown style={{ verticalAlign: "middle", marginLeft: "6px" }} /></option>
+          <option> March 2024 <FiChevronDown style={{ verticalAlign: "middle", marginLeft: "6px", fontWeight:"300", fontSize: "16px" }} /></option>
         </select>
       </div>
 
@@ -78,15 +79,16 @@ const TopPerformers = () => {
               <td>
                 <div className="tp-profile-info">
                   <img src={emp.image} alt={emp.name} className="tp-avatar" />
-
                   <div>
                     <p className="tp-bold">{emp.name}</p>
-                    <p>{emp.role}</p>
+                    <p className="tp-role">{emp.role}</p>
                   </div>
                 </div>
               </td>
               <td>{emp.project}</td>
-              <td><span className={`tp-badge ${emp.color}`}>{emp.priority}</span></td>
+              <td>
+                <span className={`tp-badge ${emp.color}`}>{emp.priority}</span>
+              </td>
               <td>{emp.budget}</td>
             </tr>
           ))}

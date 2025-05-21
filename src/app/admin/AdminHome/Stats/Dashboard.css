@@ -4,35 +4,38 @@
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
   width: 100%;
   max-width: 850px;
   font-family: "Plus Jakarta Sans", sans-serif !important;
-  
 }
 
 .tp-header {
-  position: relative;
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .tp-subtitle {
-  color: gray;
-  margin-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+  margin: 5px 0;
 }
 
 .tp-title {
   font-weight: 600;
+  font-size: 20px;
+  margin: 0;
 }
 
-.tp-bold {
-  font-weight: 600;
+.tp-header-2 {
+  display: flex;
+  flex-direction: column;
 }
-.tp-header-2{
-    display: flex;
-    flex-direction: column;
-}
+
 .tp-dropdown {
     cursor: pointer;
     user-select: none;
@@ -42,6 +45,8 @@
     margin-left: auto;
     padding: .5rem 1rem;
     font-weight: 300;
+    border:none;
+    font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 
 .tp-table {
@@ -54,11 +59,15 @@
   text-align: left;
   padding: 10px;
   color: #555;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
 }
 
 .tp-table td {
-  padding: 10px;
-  vertical-align: top;
+  padding: 15px 10px;
+  vertical-align: middle;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .tp-profile-info {
@@ -72,30 +81,38 @@
   height: 40px;
   background: #eee;
   border-radius: 50%;
-  object-fit: cover;  /* Ensures image covers the circle without distortion */
+  object-fit: cover;
 }
 
-
+.tp-bold {
+  font-weight: 600;
+  margin: 0;
+}
 
 .tp-badge {
   padding: 4px 10px;
   border-radius: 10px;
   font-size: 12px;
   font-weight: 500;
+  display: inline-block;
+  text-transform: capitalize;
 }
 
 .tp-badge.blue {
   background: #e0e7ff;
   color: #4e6bff;
 }
+
 .tp-badge.green {
   background: #d0f0d3;
   color: #34c38f;
 }
+
 .tp-badge.orange {
   background: #ffeacc;
   color: #ffa000;
 }
+
 .tp-badge.red {
   background: #fad7d7;
   color: #f46a6a;
@@ -107,33 +124,36 @@
   background: #fff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  margin-bottom: 20px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
   width: 100%;
   max-width: 450px;
   font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 
 .ws-subtitle {
-  color: gray;
-  margin-bottom: 10px;
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .ws-title {
   font-weight: 600;
+  font-size: 18px;
+  margin: 0;
 }
 
 .ws-chart {
   height: 100px;
   background: linear-gradient(to top, #e0e7ff, #ffffff);
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .ws-stats-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .ws-stat-box {
@@ -149,26 +169,44 @@
   margin-right: 10px;
 }
 
-.ws-icon.purple { background: #d6ccfc; }
-.ws-icon.green { background: #d0f0d3; }
-.ws-icon.red { background: #fad7d7; }
+.ws-icon.purple {
+  background: #d6ccfc;
+}
+.ws-icon.green {
+  background: #d0f0d3;
+}
+.ws-icon.red {
+  background: #fad7d7;
+}
 
 .ws-value {
   font-weight: bold;
 }
-.ws-value.blue { color: #4e6bff; }
-.ws-value.green { color: #34c38f; }
-.ws-value.red { color: #f46a6a; }
+.ws-value.blue {
+  color: #4e6bff;
+}
+.ws-value.green {
+  color: #34c38f;
+}
+.ws-value.red {
+  color: #f46a6a;
+}
 
-/* Responsive */
+/* Responsive Enhancements */
 @media (max-width: 768px) {
   .ws-stats-list {
     flex-direction: column;
   }
 
-  .tp-profile-info {
+  .tp-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .tp-profile-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
   }
 
   .tp-table,
@@ -178,13 +216,28 @@
   .tp-table td,
   .tp-table tr {
     display: block;
-  }
-
-  .tp-table td {
-    border-bottom: 1px solid #eee;
+    width: 100%;
   }
 
   .tp-table th {
     display: none;
+  }
+
+  .tp-table td {
+    position: relative;
+    padding-left: 50%;
+    border-bottom: 1px solid #eee;
+  }
+
+  .tp-table td::before {
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #666;
+    content: attr(data-label);
   }
 }

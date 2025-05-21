@@ -64,10 +64,12 @@ const EarningsCards = () => {
         </div>
 
         <div className="info">
+          <div className="info-2">
           <h2>$36,358</h2>
           <div className="growth positive">
             <FiArrowUpRight />
             <span>+9% last year</span>
+          </div>
           </div>
         </div>
 
@@ -91,10 +93,12 @@ const EarningsCards = () => {
         </div>
 
         <div className="info">
+          <div className="info-2">
           <h2>$6,820</h2>
           <div className="growth negative">
             <FiArrowDownRight />
             <span>-9% last year</span>
+            </div>
           </div>
         </div>
 
