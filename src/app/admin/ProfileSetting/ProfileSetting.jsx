@@ -5,9 +5,9 @@ import "./profilesetting.css";
 
 const ProfileSetting = () => {
   const [form, setForm] = useState({
-    firstName: "Tom",
-    lastName: "Smith",
-    email: "tom@example.com",
+    firstName: "",
+    lastName: "",
+    email: "",
     currentPassword: "",
     newPassword: "",
     repeatPassword: "",
@@ -25,7 +25,7 @@ const ProfileSetting = () => {
 
       <div className="card">
         <h3 className="section-title">
-          <FaUserCircle className="icon" /> My Account
+          My Account
         </h3>
         <div className="account-section">
           <div className="avatar-placeholder"></div>
@@ -55,7 +55,7 @@ const ProfileSetting = () => {
 
       <div className="card">
         <h3 className="section-title">
-          <FaLock className="icon" /> Password & Security
+         Password & Security
         </h3>
         <div className="password-section">
           <input
