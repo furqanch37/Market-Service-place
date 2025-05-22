@@ -2,12 +2,12 @@
   overflow-x: auto;
   padding: 10px 4%;
   background: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
 }
 
 .team-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-width: 600px;
 }
 
@@ -97,8 +97,9 @@
   }
 
   .team-table td {
+    display: flex;
+    justify-content: center;
     text-align: right;
-    padding-left: 50%;
     position: relative;
     border: none;
     border-bottom: 1px solid #eee;

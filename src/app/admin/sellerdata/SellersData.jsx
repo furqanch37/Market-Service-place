@@ -88,43 +88,38 @@ const SellersData = () => {
 
   return (
     <div className="table-wrapper">
-      <table className="team-table">
+      <table className="team-table" role="table" aria-label="Team members table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Location</th>
-            <th>Phone</th>
-            <th>Action</th>
-            <th>Block</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Location</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Action</th>
+            <th scope="col">Block</th>
           </tr>
         </thead>
         <tbody>
           {members.map((member, index) => (
             <tr key={index}>
-              <td className="name-cell">
-                <img src={member.image} alt={member.name} className="avatar" />
+              <td className="name-cell" data-label="Name">
+                <img src={member.image} alt={`${member.name}'s avatar`} className="avatar" />
                 <div>
                   <p className="name">{member.name}</p>
                   <p className="role">{member.role}</p>
                 </div>
               </td>
-              <td>{member.email}</td>
-              <td>{member.location}</td>
-              <td>{member.phone}</td>
-              <td>
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(index)}
-                >
+              <td data-label="Email">{member.email}</td>
+              <td data-label="Location">{member.location}</td>
+              <td data-label="Phone">{member.phone}</td>
+              <td data-label="Action">
+                <button className="delete-btn" onClick={() => handleDelete(index)}>
                   Delete
                 </button>
               </td>
-              <td>
+              <td data-label="Block">
                 <button
-                  className={`block-btn ${
-                    member.isBlocked ? "unblock" : "block"
-                  }`}
+                  className={`block-btn ${member.isBlocked ? "unblock" : "block"}`}
                   onClick={() => toggleBlock(index)}
                 >
                   {member.isBlocked ? "Unblock" : "Block"}
