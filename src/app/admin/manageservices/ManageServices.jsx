@@ -37,11 +37,12 @@ const JobCard = ({ title, postedDate, expiryDate, status, candidates, sellerName
         <button className="btn-disapprove">
           <FaTimesCircle className="icon" color="#fff" /> Disapprove
         </button>
-        <button className="btn-icon">
-          <FaTrash className="icon" />
-        </button>
+        
         <button className="btn-view-details" onClick={togglePopup}>
           View Details
+        </button>
+        <button className="btn-icon">
+          <FaTrash className="icon" />
         </button>
       </div>
 
@@ -49,7 +50,7 @@ const JobCard = ({ title, postedDate, expiryDate, status, candidates, sellerName
       {showPopup && (
         <div className="popup-overlay" onClick={togglePopup}>
           <div className="popup-content" onClick={e => e.stopPropagation()}>
-<h2>About this gig</h2>
+<h2>About this service</h2>
             <h3>Personal Portfolio Website & Business Website | 100+ Projects Completed</h3>
             <p>
               Looking for a <strong>stunning personal portfolio website</strong> or a <strong>professional business presence online</strong>?
