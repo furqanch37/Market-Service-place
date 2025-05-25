@@ -30,25 +30,19 @@ const ProfileSetting = () => {
         <div className="account-section">
           <div className="avatar-placeholder"></div>
           <div className="form-group">
-            <label>First Name</label>
+            <label>Name</label>
             <input
               name="firstName"
               value={form.firstName}
               onChange={handleChange}
             />
-            <label>Last Name</label>
+            <label>Email</label>
             <input
               name="lastName"
               value={form.lastName}
               onChange={handleChange}
             />
-            <label>Email</label>
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              type="email"
-            />
+          
           </div>
         </div>
       </div>

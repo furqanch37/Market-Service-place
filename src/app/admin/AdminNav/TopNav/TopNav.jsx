@@ -4,6 +4,7 @@ import { FaSearch } from 'react-icons/fa';
 import { FiBell, FiMoreVertical } from "react-icons/fi";
 import { MdArrowDropDown } from 'react-icons/md';
 import { HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
+import Link from 'next/link';
 
 const TopNav = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,29 +18,29 @@ const TopNav = () => {
 
       <div className="topnav-left">
         <FaSearch className="icon" />
-        <div className="topnav-link">Apps <MdArrowDropDown /></div>
-        <div className="topnav-link">Chat</div>
-        <div className="topnav-link">Calendar</div>
-        <div className="topnav-link">Email</div>
+        <div className="topnav-link"><Link className='topnav-link-main' href="/admin">Dashboard</Link></div>
+        <div className="topnav-link"><Link className='topnav-link-main' href="/admin/resolution-center">Disputes</Link></div>
+        <div className="topnav-link"><Link className='topnav-link-main' href="/admin/AddAdmin">Add Admin</Link></div>
+        <div className="topnav-link"><Link className='topnav-link-main' href="/admin/emails">Email</Link></div>
       </div>
 
       <div className="topnav-right">
       
         {/* Desktop icons */}
-        <div className="topnav-icons">
+        <div className="topnavbar-icons">
           <img src="/assets/admin/icon-flag-en.svg" alt="Flag" className="icon-img" />
 
-          <div className="icon-with-badge">
-            <HiOutlineChatBubbleLeftRight className="icon" />
-            <span className="badge">2</span>
-          </div>
+         <Link href="/admin/messages"> <div className="icon-with-badge-topnav">
+            <HiOutlineChatBubbleLeftRight className="icon-topnav" />
+            <span className="badge-topnav">2</span>
+          </div></Link>
 
-          <div className="icon-with-dot">
-            <FiBell className="icon" />
-            <span className="dot"></span>
-          </div>
+        <Link href="/admin/notifications">  <div className="icon-with-dot-topnav">
+            <FiBell className="icon-topnav" />
+            <span className="dot-topnav"></span>
+          </div></Link>
 
-          <img src="/assets/myimg.jpg" alt="User" className="avatar" />
+          <img src="/assets/myimg.jpg" alt="User" className="avatar-topnav" />
         </div>
 
       

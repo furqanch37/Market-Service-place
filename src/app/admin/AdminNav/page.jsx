@@ -1,9 +1,19 @@
+'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  FaBars, FaTimes, FaGlobe, FaShoppingCart, FaDollarSign,
-  FaMicrochip, FaHeartbeat, FaMusic, FaAngleRight, FaCalendarAlt,
-  FaThLarge, FaPowerOff
+  FaBars,
+  FaTimes,
+  FaGlobe,
+  FaShoppingCart,
+  FaUserShield,
+  FaEnvelope,
+  FaCogs,
+  FaUserCircle,
+  FaExchangeAlt,
+  FaBalanceScale,
+  FaHome,
+  FaPowerOff
 } from 'react-icons/fa';
 import './adminNav.css';
 
@@ -27,23 +37,53 @@ const AdminNav = () => {
 
         <nav className="nav-sections">
           <div className="nav-group">
-            <p className="nav-title">HOME</p>
             <ul>
-              <li><Link href="#"><FaGlobe className="icon" /><span>Modern</span></Link></li>
-              <li><Link href="#"><FaShoppingCart className="icon" /><span>eCommerce</span></Link></li>
-              <li><Link href="#"><FaDollarSign className="icon" /><span>NFT</span></Link></li>
-              <li><Link href="#"><FaMicrochip className="icon" /><span>Crypto</span></Link></li>
-              <li><Link href="#"><FaHeartbeat className="icon" /><span>General</span></Link></li>
-              <li><Link href="#"><FaMusic className="icon" /><span>Music</span></Link></li>
-              <li><Link href="#"><FaAngleRight className="icon" /><span>Frontend page</span></Link></li>
-            </ul>
-          </div>
-
-          <div className="nav-group">
-            <p className="nav-title">APPS</p>
-            <ul>
-              <li><Link href="#"><FaCalendarAlt className="icon" /><span>Calendar</span></Link></li>
-              <li><Link href="#"><FaThLarge className="icon" /><span>Kanban</span></Link></li>
+              <li>
+                <Link href="/admin">
+                  <FaHome className="icon" /> <span>Home</span>
+                </Link>
+              </li>
+            
+              <li>
+                <Link href="/admin/buyerdata">
+                  <FaGlobe className="icon" /> <span>Manage Buyers</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/sellerdata">
+                  <FaShoppingCart className="icon" /> <span>Manage Sellers</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/SeeAllAdmin">
+                  <FaUserShield className="icon" /> <span>Manage Admins</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/emails">
+                  <FaEnvelope className="icon" /> <span>Email</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/manageservices">
+                  <FaCogs className="icon" /> <span>Manage Services</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/ProfileSetting">
+                  <FaUserCircle className="icon" /> <span>Settings</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/recent-transactions">
+                  <FaExchangeAlt className="icon" /> <span>Transactions</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/resolution-center">
+                  <FaBalanceScale className="icon" /> <span>Resolution Center</span>
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>

@@ -12,6 +12,8 @@
   padding-top: 10px;
   z-index: 1000;
    font-family: "Plus Jakarta Sans", sans-serif !important;
+   box-shadow: 6px 0px 18px rgba(0, 0, 0, 0.12);
+
 }
 
 .topnav-left,
@@ -31,7 +33,7 @@
   gap: 4px;
 }
 
-.icon {
+.icon-topnav {
   font-size: 16px;
   color: #1f2937;
   cursor: pointer;
@@ -45,11 +47,11 @@
   cursor: pointer;
 }
 
-.icon-with-badge {
+.icon-with-badge-topnav {
   position: relative;
 }
 
-.icon-with-badge .badge {
+.icon-with-badge-topnav .badge-topnav {
   position: absolute;
   top: -6px;
   right: -8px;
@@ -61,21 +63,24 @@
   border-radius: 50%;
 }
 
-.icon-with-dot {
+.icon-with-dot-topnav {
   position: relative;
 }
 
-.icon-with-dot .dot {
+.icon-with-dot-topnav .dot-topnav {
   position: absolute;
-  top: -1px;
-  right: 5px;
+  top: -4px;
+  right: -4px;
   width: 6px;
   height: 6px;
   background-color: #6366f1;
   border-radius: 50%;
 }
-
-.avatar {
+.topnav-link-main{
+  text-decoration: none;
+   color: #1f2937;
+}
+.avatar-topnav {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -95,9 +100,10 @@
 .topNavIcon{
   font-weight: 700;
   font-size: 23px;
+  margin-top: 20px;
 }
 /* Hide icons container on mobile */
-.topnav-icons {
+.topnavbar-icons {
   display: flex;
   gap: 20px;
 }
@@ -134,5 +140,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+  .topnav {
+    box-shadow: none;
   }
 }

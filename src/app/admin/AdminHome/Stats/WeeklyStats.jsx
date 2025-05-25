@@ -80,7 +80,7 @@ const WeeklyStats = () => {
       <div className="ws-stats-list">
         <div className="ws-stat-box">
           <div className="ws-icon purple" />
-          <div>
+          <div className='topScalesScorers'>
             <p className="ws-title">Top Sales</p>
             <p>Johnathan Doe</p>
           </div>
@@ -89,7 +89,7 @@ const WeeklyStats = () => {
 
         <div className="ws-stat-box">
           <div className="ws-icon green" />
-          <div>
+          <div className='topScalesScorers'>
             <p className="ws-title">Best Seller</p>
             <p>MaterialPro Admin</p>
           </div>
@@ -98,7 +98,7 @@ const WeeklyStats = () => {
 
         <div className="ws-stat-box">
           <div className="ws-icon red" />
-          <div>
+          <div className='topScalesScorers'>
             <p className="ws-title">Most Commented</p>
             <p>Ample Admin</p>
           </div>
