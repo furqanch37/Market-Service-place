@@ -23,7 +23,7 @@ const LoginPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
+          credentials: "include", // for cookie
           body: JSON.stringify({ email, password }),
         }
       );
@@ -31,43 +31,38 @@ const LoginPage = () => {
       const data = await res.json();
       console.log("Login response:", data);
 
-      if (res.ok && data.success && data.user && Array.isArray(data.user.role)) {
-        // Store token if returned
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-        }
-
+      if (res.ok && data.success && Array.isArray(data.user?.role)) {
         const roles = data.user.role;
 
-        // Define priority
+        // Priority: seller > buyer
         const rolePriority = {
-          superadmin: 1,
-          admin: 2,
-          seller: 3,
-          buyer: 4,
+          seller: 1,
+          buyer: 2,
         };
 
-        // Find highest priority role
-        const sortedRoles = roles.sort((a, b) => rolePriority[a] - rolePriority[b]);
+        const validRoles = roles.filter((role) =>
+          ["seller", "buyer"].includes(role)
+        );
+
+        if (validRoles.length === 0) {
+          setError("No valid roles found (seller or buyer).");
+          return;
+        }
+
+        const sortedRoles = validRoles.sort(
+          (a, b) => rolePriority[a] - rolePriority[b]
+        );
         const topRole = sortedRoles[0];
 
-        // Redirect based on top priority role
-        switch (topRole) {
-          case "superadmin":
-          case "admin":
-            router.push("/admin");
-            break;
-          case "seller":
-            router.push("/seller/home");
-            break;
-          case "buyer":
-            router.push("/buyer/home");
-            break;
-          default:
-            setError("Unrecognized role");
+        if (topRole === "seller") {
+          router.push("/seller/home");
+        } else if (topRole === "buyer") {
+          router.push("/buyer/home");
+        } else {
+          setError("Unrecognized role.");
         }
       } else {
-        setError(data.message || "Login failed");
+        setError(data.message || "Login failed.");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -101,7 +96,7 @@ const LoginPage = () => {
           </button>
         </form>
 
-       
+        {error && <p className="error-message">{error}</p>}
 
         <div className="separator">
           <hr />
