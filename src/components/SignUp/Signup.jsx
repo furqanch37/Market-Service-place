@@ -1,4 +1,4 @@
-'use client'; // if using Next.js 13+ app router
+'use client';
 
 import React, { useState } from 'react';
 import './Signup.css';
@@ -16,14 +16,22 @@ const SignupForm = () => {
     country: 'Pakistan',
   });
 
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ 
-      ...formData, 
-      [e.target.name]: e.target.value 
-    });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -31,24 +39,22 @@ const SignupForm = () => {
     setLoading(true);
     setError('');
 
+    const data = new FormData();
+    Object.entries(formData).forEach(([key, value]) => data.append(key, value));
+    if (image) data.append('image', image);
+
     try {
       const response = await fetch('https://backend-service-marketplace.vercel.app/api/users/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        body: data,
       });
 
       const result = await response.json();
-
       if (response.ok) {
-        // Redirect to login page on success
         router.push('/login');
       } else {
         setError(result.message || 'Registration failed');
       }
-
     } catch (err) {
       setError('Something went wrong. Please try again.');
     } finally {
@@ -67,44 +73,44 @@ const SignupForm = () => {
         </button>
       </div>
 
-      <div className="divider">
-        <span>or</span>
-      </div>
+      <div className="divider"><span>or</span></div>
 
-      <form className="signup-form" onSubmit={handleSubmit}>
+      <form className="signup-form" onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="name-fields">
-          <input 
-            type="text" 
-            name="firstName" 
-            placeholder="First name" 
-            value={formData.firstName} 
-            onChange={handleChange} 
-            required 
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First name"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
           />
-          <input 
-            type="text" 
-            name="lastName" 
-            placeholder="Last name" 
-            value={formData.lastName} 
-            onChange={handleChange} 
-            required 
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last name"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
           />
         </div>
-        <input 
-          type="email" 
-          name="email" 
-          placeholder="Work email address" 
-          value={formData.email} 
-          onChange={handleChange} 
-          required 
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Work email address"
+          value={formData.email}
+          onChange={handleChange}
+          required
         />
-        <input 
-          type="password" 
-          name="password" 
-          placeholder="Password (8 or more characters)" 
-          value={formData.password} 
-          onChange={handleChange} 
-          required 
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password (8 or more characters)"
+          value={formData.password}
+          onChange={handleChange}
+          required
         />
 
         <select name="country" value={formData.country} onChange={handleChange}>
@@ -113,6 +119,24 @@ const SignupForm = () => {
           <option>United Kingdom</option>
           <option>India</option>
         </select>
+
+        {/* Custom Image Upload Field */}
+        <div className="image-upload-wrapper">
+          <label htmlFor="imageUpload" className="custom-file-label">
+            {imagePreview ? (
+              <img src={imagePreview} alt="Preview" className="image-preview" />
+            ) : (
+              'Click to upload profile image'
+            )}
+          </label>
+          <input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ display: 'none' }}
+          />
+        </div>
 
         {error && <p className="error-text">{error}</p>}
 
