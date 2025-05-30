@@ -1,90 +1,78 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./buyerdata.css";
 
-const initialTeamMembers = [
-  {
-    name: "Emma Adams",
-    role: "Web Developer",
-    email: "adams@mail.com",
-    location: "Boston, USA",
-    phone: "+91(070)123–4567",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Olivia Allen",
-    role: "Web Designer",
-    email: "allen@mail.com",
-    location: "Sydney, Australia",
-    phone: "+91(125)450–1500",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Isabella Anderson",
-    role: "UX/UI Designer",
-    email: "anderson@mail.com",
-    location: "Miami, USA",
-    phone: "+91(100)154–1254",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Amelia Armstrong",
-    role: "Ethical Hacker",
-    email: "armstrong@mail.com",
-    location: "Tokyo, Japan",
-    phone: "+91(154)199–1540",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Emily Atkinson",
-    role: "Web Developer",
-    email: "atkinson@mail.com",
-    location: "Edinburgh, UK",
-    phone: "+91(900)150–1500",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Sofia Bailey",
-    role: "UX/UI Designer",
-    email: "bailey@mail.com",
-    location: "New York, USA",
-    phone: "+91(001)160–1845",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Victoria Sharma",
-    role: "Project Manager",
-    email: "sharma@mail.com",
-    location: "Miami, USA",
-    phone: "+91(110)180–1600",
-    image: "/assets/myimg.jpg",
-  },
-  {
-    name: "Penelope Baker",
-    role: "Web Developer",
-    email: "baker@mail.com",
-    location: "Edinburgh, UK",
-    phone: "+91(405)483–4512",
-    image: "/assets/myimg.jpg",
-  },
-];
+// Helper function to get cookie by name
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+const API_BASE = "https://backend-service-marketplace.vercel.app/api/users";
 
 const BuyerData = () => {
-  const [members, setMembers] = useState(
-    initialTeamMembers.map((member) => ({ ...member, isBlocked: false }))
-  );
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [updatingUserId, setUpdatingUserId] = useState(null);
 
-  const toggleBlock = (index) => {
-    const updatedMembers = [...members];
-    updatedMembers[index].isBlocked = !updatedMembers[index].isBlocked;
-    setMembers(updatedMembers);
+  const token = getCookie("token");
+
+  useEffect(() => {
+    const fetchBuyers = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/buyers`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch buyers");
+        const data = await res.json();
+        setMembers(data.users);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBuyers();
+  }, [token]);
+
+  const toggleBlock = async (userId, currentlyBlocked) => {
+    setUpdatingUserId(userId);
+    try {
+      const url = `${API_BASE}/${userId}/${currentlyBlocked ? "unblock" : "block"}`;
+
+      const res = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to update block status");
+
+      setMembers((prev) =>
+        prev.map((user) =>
+          user._id === userId ? { ...user, blocked: !currentlyBlocked } : user
+        )
+      );
+    } catch (err) {
+      alert("Error: " + err.message);
+    } finally {
+      setUpdatingUserId(null);
+    }
   };
 
-  const handleDelete = (index) => {
-    const updatedMembers = [...members];
-    updatedMembers.splice(index, 1);
-    setMembers(updatedMembers);
-  };
+  if (loading) return <p>Loading buyers...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="table-wrapper">
@@ -93,41 +81,32 @@ const BuyerData = () => {
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Location</th>
-            <th>Phone</th>
-            <th>Action</th>
+            <th>Country</th>
+            <th>Verified</th>
             <th>Block</th>
           </tr>
         </thead>
         <tbody>
-          {members.map((member, index) => (
-            <tr key={index}>
-              <td className="name-cell">
-                <img src={member.image} alt={member.name} className="avatar" />
-                <div>
-                  <p className="name">{member.name}</p>
-                  <p className="role">{member.role}</p>
-                </div>
-              </td>
+          {members.map((member) => (
+            <tr key={member._id}>
+              <td>{member.firstName} {member.lastName}</td>
               <td>{member.email}</td>
-              <td>{member.location}</td>
-              <td>{member.phone}</td>
+              <td>{member.country}</td>
+              <td>{member.verified ? "Yes" : "No"}</td>
               <td>
                 <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(index)}
+                  className={`block-btn ${member.blocked ? "unblock" : "block"}`}
+                  onClick={() => toggleBlock(member._id, member.blocked)}
+                  disabled={updatingUserId === member._id}
                 >
-                  Delete
-                </button>
-              </td>
-              <td>
-                <button
-                  className={`block-btn ${
-                    member.isBlocked ? "unblock" : "block"
-                  }`}
-                  onClick={() => toggleBlock(index)}
-                >
-                  {member.isBlocked ? "Unblock" : "Block"}
+                  {updatingUserId === member._id
+                    ? member.blocked
+                      ? "Unblocking..."
+                      : "Blocking..."
+                    : member.blocked
+                      ? "Unblock"
+                      : "Block"
+                  }
                 </button>
               </td>
             </tr>
