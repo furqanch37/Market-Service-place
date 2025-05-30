@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import "./sellerdata.css";
+import { baseUrl } from "@/const";
 
 const SellersData = () => {
   const [members, setMembers] = useState([]);
@@ -17,7 +18,7 @@ const SellersData = () => {
 
         const token = Cookies.get("token");
         const res = await fetch(
-          "https://backend-service-marketplace.vercel.app/api/users/sellers",
+          `${baseUrl}/users/seller`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -48,7 +49,7 @@ const SellersData = () => {
   const toggleBlock = async (id, currentlyBlocked) => {
     try {
       const token = Cookies.get("token");
-      const url = `https://backend-service-marketplace.vercel.app/api/users/${id}/${currentlyBlocked ? "unblock" : "block"}`;
+      const url = `${baseUrl}/users/${id}/${currentlyBlocked ? "unblock" : "block"}`;
 
       const res = await fetch(url, {
         method: "PUT",

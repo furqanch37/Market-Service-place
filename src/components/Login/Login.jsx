@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import "./Login.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { baseUrl } from "@/const";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const LoginPage = () => {
 
     try {
       const res = await fetch(
-        "https://backend-service-marketplace.vercel.app/api/users/login",
+        `${baseUrl}/users/login`,
         {
           method: "POST",
           headers: {
