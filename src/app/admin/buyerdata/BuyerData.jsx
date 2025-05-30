@@ -71,6 +71,14 @@ const BuyerData = () => {
     }
   };
 
+  // New: Delete handler - just removes from state for now
+  const handleDelete = (userId) => {
+    if (window.confirm("Are you sure you want to delete this buyer?")) {
+      // TODO: Add API call to delete on backend
+      setMembers((prev) => prev.filter((user) => user._id !== userId));
+    }
+  };
+
   if (loading) return <p>Loading buyers...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
@@ -79,16 +87,31 @@ const BuyerData = () => {
       <table className="team-table">
         <thead>
           <tr>
+            <th>Picture</th>
             <th>Name</th>
             <th>Email</th>
             <th>Country</th>
             <th>Verified</th>
             <th>Block</th>
+            <th>Action</th> {/* Added Action header */}
           </tr>
         </thead>
         <tbody>
           {members.map((member) => (
             <tr key={member._id}>
+              <td>
+                {member.profileUrl ? (
+                  <img
+                    src={member.profileUrl}
+                    alt={`${member.firstName} ${member.lastName}`}
+                    className="buyer-avatar"
+                  />
+                ) : (
+                  <div className="fallback-avatar">
+                    {member.firstName?.[0]?.toUpperCase() || "?"}
+                  </div>
+                )}
+              </td>
               <td>{member.firstName} {member.lastName}</td>
               <td>{member.email}</td>
               <td>{member.country}</td>
@@ -105,8 +128,15 @@ const BuyerData = () => {
                       : "Blocking..."
                     : member.blocked
                       ? "Unblock"
-                      : "Block"
-                  }
+                      : "Block"}
+                </button>
+              </td>
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(member._id)}
+                >
+                  Delete
                 </button>
               </td>
             </tr>

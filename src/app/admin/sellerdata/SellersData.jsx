@@ -9,7 +9,6 @@ const SellersData = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch sellers on mount
   useEffect(() => {
     const fetchSellers = async () => {
       try {
@@ -17,15 +16,12 @@ const SellersData = () => {
         setError(null);
 
         const token = Cookies.get("token");
-        const res = await fetch(
-          `${baseUrl}/users/seller`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${baseUrl}/users/sellers`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+        });
 
         if (!res.ok) throw new Error("Failed to fetch sellers");
 
@@ -45,7 +41,6 @@ const SellersData = () => {
     fetchSellers();
   }, []);
 
-  // Block or unblock user
   const toggleBlock = async (id, currentlyBlocked) => {
     try {
       const token = Cookies.get("token");
@@ -57,12 +52,11 @@ const SellersData = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-          credentials: "include",
+        credentials: "include",
       });
 
       if (!res.ok) throw new Error("Failed to update block status");
 
-      // Update local state
       setMembers((prev) =>
         prev.map((m) =>
           m._id === id ? { ...m, blocked: !currentlyBlocked } : m
@@ -73,7 +67,6 @@ const SellersData = () => {
     }
   };
 
-  // Delete user locally (optional: you can also call API if available)
   const handleDelete = (id) => {
     setMembers((prev) => prev.filter((m) => m._id !== id));
   };
@@ -103,12 +96,14 @@ const SellersData = () => {
               <tr key={member._id}>
                 <td className="name-cell">
                   <img
-                    src={member.image || "/assets/myimg.jpg"}
+                    src={member.image?.trim() || "/assets/myimg.jpg"}
                     alt={`${member.firstName} ${member.lastName}`}
                     className="avatar"
                   />
                   <div>
-                    <p className="name">{member.firstName} {member.lastName}</p>
+                    <p className="name">
+                      {member.firstName} {member.lastName}
+                    </p>
                     <p className="role">{(member.role || []).join(", ")}</p>
                   </div>
                 </td>
