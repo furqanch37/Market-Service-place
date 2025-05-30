@@ -42,7 +42,7 @@ const SignupForm = () => {
 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-    if (image) data.append('image', image);
+    if (image) data.append('profileImage', image); // match backend key
 
     try {
       const response = await fetch(`${baseUrl}/users/register`, {
