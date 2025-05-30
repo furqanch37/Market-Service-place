@@ -49,7 +49,7 @@ const BuyerData = () => {
       const url = `${API_BASE}/${userId}/${currentlyBlocked ? "unblock" : "block"}`;
 
       const res = await fetch(url, {
-        method: "POST",
+        method: "PUT",
         credentials: "include",
         headers: {
           Authorization: `Bearer ${token}`,
