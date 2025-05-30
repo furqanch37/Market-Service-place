@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './Signup.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { baseUrl } from '@/const';
 
 const SignupForm = () => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const SignupForm = () => {
     if (image) data.append('image', image);
 
     try {
-      const response = await fetch('https://backend-service-marketplace.vercel.app/api/users/register', {
+      const response = await fetch(`${baseUrl}/users/register`, {
         method: 'POST',
         body: data,
       });
