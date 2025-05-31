@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import './Signup.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import { baseUrl } from '@/const';
 
 const SignupForm = () => {
@@ -24,7 +26,7 @@ const SignupForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -42,7 +44,7 @@ const SignupForm = () => {
 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-    if (image) data.append('profileImage', image); // match backend key
+    if (image) data.append('image', image);
 
     try {
       const response = await fetch(`${baseUrl}/users/register`, {
@@ -63,12 +65,31 @@ const SignupForm = () => {
     }
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const res = await axios.post(`${baseUrl}/google-login`, {
+          access_token: tokenResponse.access_token,
+        });
+        if (res.status === 200) {
+          router.push('/dashboard'); // change to your desired redirect
+        }
+      } catch (err) {
+        console.error(err);
+        setError('Google login failed. Please try again.');
+      }
+    },
+    onError: () => {
+      setError('Google login was cancelled or failed.');
+    },
+  });
+
   return (
     <div className="signup-container">
       <h2>Sign up</h2>
 
       <div className="social-buttons">
-        <button className="google-btn">
+        <button className="google-btn" onClick={() => googleLogin()}>
           <img src="/assets/google.jpeg" alt="Google" className="google-logo" />
           Continue with Google
         </button>
@@ -121,7 +142,6 @@ const SignupForm = () => {
           <option>India</option>
         </select>
 
-        {/* Custom Image Upload Field */}
         <div className="image-upload-wrapper">
           <label htmlFor="imageUpload" className="custom-file-label">
             {imagePreview ? (
