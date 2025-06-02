@@ -1,14 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "./buyerdata.css";
-
-// Helper function to get cookie by name
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-}
-
+import { baseUrl } from '@/const';
 const API_BASE = "https://backend-service-marketplace.vercel.app/api/users";
 
 const BuyerData = () => {
@@ -17,17 +10,12 @@ const BuyerData = () => {
   const [error, setError] = useState(null);
   const [updatingUserId, setUpdatingUserId] = useState(null);
 
-  const token = getCookie("token");
-
   useEffect(() => {
     const fetchBuyers = async () => {
       try {
         const res = await fetch(`${API_BASE}/buyers`, {
           method: "GET",
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include", // sends cookies
         });
 
         if (!res.ok) throw new Error("Failed to fetch buyers");
@@ -41,7 +29,7 @@ const BuyerData = () => {
     };
 
     fetchBuyers();
-  }, [token]);
+  }, []);
 
   const toggleBlock = async (userId, currentlyBlocked) => {
     setUpdatingUserId(userId);
@@ -52,7 +40,6 @@ const BuyerData = () => {
         method: "PUT",
         credentials: "include",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
@@ -71,13 +58,30 @@ const BuyerData = () => {
     }
   };
 
-  // New: Delete handler - just removes from state for now
-  const handleDelete = (userId) => {
-    if (window.confirm("Are you sure you want to delete this buyer?")) {
-      // TODO: Add API call to delete on backend
-      setMembers((prev) => prev.filter((user) => user._id !== userId));
+const handleDelete = async (userId) => {
+  if (window.confirm("Are you sure you want to delete this buyer?")) {
+    try {
+      const response = await fetch(`${baseUrl}/users/admin/delete-user/${userId}`, {
+        method: "DELETE",
+        credentials: "include", // 👈 ensures cookies like auth tokens are sent
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Remove user from UI
+        setMembers((prev) => prev.filter((user) => user._id !== userId));
+        alert(data.message || "User deleted successfully.");
+      } else {
+        alert(data.message || "Failed to delete user.");
+      }
+
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("An error occurred. Please try again.");
     }
-  };
+  }
+};
 
   if (loading) return <p>Loading buyers...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -93,7 +97,7 @@ const BuyerData = () => {
             <th>Country</th>
             <th>Verified</th>
             <th>Block</th>
-            <th>Action</th> {/* Added Action header */}
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>

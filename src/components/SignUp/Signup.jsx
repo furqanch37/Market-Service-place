@@ -5,7 +5,6 @@ import './Signup.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
 import { baseUrl } from '@/const';
 
 const SignupForm = () => {
@@ -44,7 +43,7 @@ const SignupForm = () => {
 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-    if (image) data.append('image', image);
+    if (image) data.append('profileImage', image);
 
     try {
       const response = await fetch(`${baseUrl}/users/register`, {
@@ -59,31 +58,46 @@ const SignupForm = () => {
         setError(result.message || 'Registration failed');
       }
     } catch (err) {
+      console.error(err);
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+const googleLogin = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      console.log('Google Access Token:', tokenResponse.access_token);
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const res = await axios.post(`${baseUrl}/google-login`, {
-          access_token: tokenResponse.access_token,
-        });
-        if (res.status === 200) {
-          router.push('/dashboard'); // change to your desired redirect
+      const response = await fetch(`${baseUrl}/users/google-register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: tokenResponse.access_token }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        router.push('/dashboard');
+      } else {
+        if (result.message === 'User already exists. Please login.') {
+          router.push('/login');
+        } else {
+          setError(result.message || 'Google login failed.');
         }
-      } catch (err) {
-        console.error(err);
-        setError('Google login failed. Please try again.');
       }
-    },
-    onError: () => {
-      setError('Google login was cancelled or failed.');
-    },
-  });
 
+    } catch (err) {
+      console.error(err);
+      setError('Google login failed. Please try again.');
+    }
+  },
+  onError: () => {
+    setError('Google login was cancelled or failed.');
+  },
+});
   return (
     <div className="signup-container">
       <h2>Sign up</h2>

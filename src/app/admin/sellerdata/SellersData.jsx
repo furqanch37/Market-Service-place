@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import "./sellerdata.css";
 import { baseUrl } from "@/const";
 
@@ -15,11 +14,7 @@ const SellersData = () => {
         setLoading(true);
         setError(null);
 
-        const token = Cookies.get("token");
         const res = await fetch(`${baseUrl}/users/sellers`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           credentials: "include",
         });
 
@@ -43,15 +38,10 @@ const SellersData = () => {
 
   const toggleBlock = async (id, currentlyBlocked) => {
     try {
-      const token = Cookies.get("token");
       const url = `${baseUrl}/users/${id}/${currentlyBlocked ? "unblock" : "block"}`;
 
       const res = await fetch(url, {
         method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
         credentials: "include",
       });
 
@@ -67,8 +57,47 @@ const SellersData = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    setMembers((prev) => prev.filter((m) => m._id !== id));
+  const handleDelete = async (userId) => {
+    if (window.confirm("Are you sure you want to delete this seller?")) {
+      try {
+        const res = await fetch(`${baseUrl}/users/admin/delete-user/${userId}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setMembers((prev) => prev.filter((m) => m._id !== userId));
+          alert(data.message || "Seller deleted successfully.");
+        } else {
+          alert(data.message || "Failed to delete seller.");
+        }
+      } catch (err) {
+        alert("Error deleting seller: " + err.message);
+      }
+    }
+  };
+
+  const handleApprove = async (id) => {
+    try {
+      const res = await fetch(`${baseUrl}/users/verify/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Failed to approve seller");
+
+      setMembers((prev) =>
+        prev.map((m) =>
+          m._id === id ? { ...m, verified: true } : m
+        )
+      );
+
+      alert("Seller approved successfully!");
+    } catch (err) {
+      alert("Error approving seller: " + err.message);
+    }
   };
 
   if (loading) return <p>Loading sellers...</p>;
@@ -82,7 +111,7 @@ const SellersData = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Country</th>
-            <th>Action</th>
+            <th>Actions</th>
             <th>Block</th>
           </tr>
         </thead>
@@ -95,27 +124,42 @@ const SellersData = () => {
             members.map((member) => (
               <tr key={member._id}>
                 <td className="name-cell">
+                   {member.profileUrl ? (
                   <img
-                    src={member.image?.trim() || "/assets/myimg.jpg"}
+                    src={member.profileUrl}
                     alt={`${member.firstName} ${member.lastName}`}
-                    className="avatar"
+                    className="buyer-avatar"
                   />
-                  <div>
+                ) : (
+                  <div className="fallback-avatar">
+                    {member.firstName?.[0]?.toUpperCase() || "?"}
+                  </div>
+                )}
+               <div>
                     <p className="name">
                       {member.firstName} {member.lastName}
                     </p>
-                    <p className="role">{(member.role || []).join(", ")}</p>
+                    <p className="role">Seller</p>
                   </div>
                 </td>
                 <td>{member.email}</td>
                 <td>{member.country || "N/A"}</td>
                 <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(member._id)}
-                  >
-                    Delete
-                  </button>
+                  <div style={{ display: "flex",  gap: "6px" }}>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(member._id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className={`approve-btn ${member.verified ? "approved" : "approve"}`}
+                      onClick={() => handleApprove(member._id)}
+                      disabled={member.verified}
+                    >
+                      {member.verified ? "Approved" : "Approve"}
+                    </button>
+                  </div>
                 </td>
                 <td>
                   <button
