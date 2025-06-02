@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { baseUrl } from '@/const';
 import { setCurrentDashboard } from '@/redux/features/userSlice';
+import { toast } from 'react-hot-toast';
 
 const BuyerNav = () => {
   const logout = useLogout();
@@ -32,7 +33,7 @@ const BuyerNav = () => {
         router.push('/seller/dashboard');
          dispatch(setCurrentDashboard('seller'));
       } else {
-        alert('Your account approval is pending.');
+        toast.error('Your account approval is pending.');
       }
     } else {
       try {
@@ -44,13 +45,13 @@ const BuyerNav = () => {
         });
 
         if (res.ok) {
-          alert('Your request has been sent to the admin and is in pending state.');
+          toast.success('Your request has been sent to the admin and is in pending state.');
         } else {
-          alert('Failed to send request to admin.');
+          toast.error('Failed to send request to admin.');
         }
       } catch (err) {
         console.error('Error sending seller request:', err);
-        alert('Something went wrong. Please try again later.');
+        toast.error('Something went wrong. Please try again later.');
       }
     }
   };
