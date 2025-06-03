@@ -89,7 +89,7 @@ const SeeAllAdmin = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Country</th>
-            <th>Action</th>
+            /*<th>Action</th>*/
           </tr>
         </thead>
         <tbody>
