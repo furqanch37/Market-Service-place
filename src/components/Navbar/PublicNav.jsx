@@ -40,6 +40,7 @@ const PublicNav = () => {
 
         <div className="public-navbar-right">
           <div className="public-navbar-actions">
+            <Link href="/register?role=seller" className="public-nav-link"><button className="public-green-btn">Apply as a freelancer</button></Link>
             <Link href="/register" className="public-nav-link"><button className="public-green-btn">Sign up</button></Link>
             <Link href="/login" className="public-nav-link">Log In</Link>
           </div>
