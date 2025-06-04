@@ -7,27 +7,22 @@ const ScopePricing = ({ onNext, onBack }) => {
   const [formData, setFormData] = useState({
     packages: {
       basic: {
-        name: '', description: '', deliveryTime: '', 
-        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
-        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+        name: '', description: '', deliveryTime: '', price: '',
+        revisions: 0,
+        pages: 1, afterProjectSupport: false,
       },
       standard: {
-        name: '', description: '', deliveryTime: '',
-        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
-        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+        name: '', description: '', deliveryTime: '', price: '',
+        revisions: 0,
+        pages: 1, afterProjectSupport: false,
       },
       premium: {
-        name: '', description: '', deliveryTime: '', 
-        responsiveDesign: false, sourceCode: false, revisions: 0, pages: 1,
-        contentUpload: false, paymentIntegration: false, socialIcons: false, price: ''
+        name: '', description: '', deliveryTime: '', price: '',
+        revisions: 0,
+        pages: 1, afterProjectSupport: false,
       },
     },
-    extras: {
-      fastDelivery: false,
-      additionalPage: false,
-      sourceCode: false,
-      designCustomization: false,
-    },
+   
   });
 
   const [charCount, setCharCount] = useState({ basic: 0, standard: 0, premium: 0 });
@@ -59,8 +54,7 @@ const ScopePricing = ({ onNext, onBack }) => {
   };
 
   const handleDescriptionChange = (pkg, e) => {
-    const newDescription = e.target.innerText;
-    const newCharCount = newDescription.length;
+    const newDescription = e.target.value;
     setFormData((prevState) => ({
       ...prevState,
       packages: {
@@ -71,15 +65,7 @@ const ScopePricing = ({ onNext, onBack }) => {
         },
       },
     }));
-    setCharCount((prevState) => ({
-      ...prevState,
-      [pkg]: newCharCount,
-    }));
-  };
-
-  const handleContinue = () => {
-    // No navigation; static action
-    console.log('Save & Continue clicked');
+    setCharCount((prev) => ({ ...prev, [pkg]: newDescription.length }));
   };
 
   return (
@@ -101,6 +87,8 @@ const ScopePricing = ({ onNext, onBack }) => {
               {['basic', 'standard', 'premium'].map((pkg) => (
                 <td key={`name-${pkg}`}>
                   <input
+                    type="text"
+                    maxLength={50}
                     name={`packages.${pkg}.name`}
                     value={formData.packages[pkg].name}
                     onChange={handleChange}
@@ -114,12 +102,15 @@ const ScopePricing = ({ onNext, onBack }) => {
               <td>Description</td>
               {['basic', 'standard', 'premium'].map((pkg) => (
                 <td key={`desc-${pkg}`}>
-                  <input
-                  className='descBox'
+                  <textarea
+                    className="descBox"
+                    name={`packages.${pkg}.description`}
+                    value={formData.packages[pkg].description}
+                    onChange={(e) => handleDescriptionChange(pkg, e)}
+                    maxLength={1200}
                     placeholder="Describe your offering"
-                    onInput={(e) => handleDescriptionChange(pkg, e)}
                   />
-                  <div className="char-count">{charCount[pkg]}/1200 Characters</div>
+                  <div className="char-count">{charCount[pkg]}/1200</div>
                 </td>
               ))}
             </tr>
@@ -138,7 +129,6 @@ const ScopePricing = ({ onNext, onBack }) => {
                       name={`packages.${pkg}.${field}`}
                       value={formData.packages[pkg][field]}
                       onChange={handleChange}
-                      placeholder={field}
                       min="0"
                     />
                   </td>
@@ -146,7 +136,7 @@ const ScopePricing = ({ onNext, onBack }) => {
               </tr>
             ))}
 
-            {["responsiveDesign", "contentUpload", "paymentIntegration", "socialIcons"].map((field) => (
+            {["afterProjectSupport"].map((field) => (
               <tr key={field}>
                 <td>{field.replace(/([A-Z])/g, ' $1')}</td>
                 {['basic', 'standard', 'premium'].map((pkg) => (
@@ -165,41 +155,7 @@ const ScopePricing = ({ onNext, onBack }) => {
         </table>
       </div>
 
-      <div className="extras">
-        <h3>Add Extra Services</h3>
-        <label>
-          <input
-            name="extras.fastDelivery"
-            type="checkbox"
-            checked={formData.extras.fastDelivery}
-            onChange={handleChange}
-          /> Extra Fast Delivery
-        </label>
-        <label>
-          <input
-            name="extras.additionalPage"
-            type="checkbox"
-            checked={formData.extras.additionalPage}
-            onChange={handleChange}
-          /> Additional Page
-        </label>
-        <label>
-          <input
-            name="extras.sourceCode"
-            type="checkbox"
-            checked={formData.extras.sourceCode}
-            onChange={handleChange}
-          /> Include Source Code
-        </label>
-        <label>
-          <input
-            name="extras.designCustomization"
-            type="checkbox"
-            checked={formData.extras.designCustomization}
-            onChange={handleChange}
-          /> Design Customization
-        </label>
-      </div>
+      
 
       <div className="submit-container">
         <button className="back-btn" onClick={onBack}>Back</button>
