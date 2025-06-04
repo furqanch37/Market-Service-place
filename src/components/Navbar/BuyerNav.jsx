@@ -35,25 +35,7 @@ const BuyerNav = () => {
       } else {
         toast.error('Your account approval is pending.');
       }
-    } else {
-      try {
-        const res = await fetch(`${baseUrl}/users/${user._id}/seller-request`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (res.ok) {
-          toast.success('Your request has been sent to the admin and is in pending state.');
-        } else {
-          toast.error('Failed to send request to admin.');
-        }
-      } catch (err) {
-        console.error('Error sending seller request:', err);
-        toast.error('Something went wrong. Please try again later.');
-      }
-    }
+    } 
   };
 
   return (
@@ -79,7 +61,7 @@ const BuyerNav = () => {
             <FaBars size={22} />
           </div>
           <div className="navbar-actions">
-            <h4 className="cursor-pointer" onClick={handleSwitchToSelling}>Switch to selling</h4>
+            {/* <h4 className="cursor-pointer" onClick={handleSwitchToSelling}>Switch to selling</h4> */}
             <Link href="/buyer/liked-services"><div className="nav-icon"><FiHeart /></div></Link>
 
             <div className="nav-message-container">

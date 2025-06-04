@@ -52,7 +52,7 @@ const SignupForm = () => {
     data.append('password', formData.password);
     data.append('country', formData.country);
     data.append('role', role); // use role from URL
-
+    
     if (role === 'seller') {
       data.append('sellerDetails[linkedUrl]', formData.linkedUrl);
       data.append('sellerDetails[speciality]', formData.speciality);
