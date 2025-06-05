@@ -1,72 +1,47 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import './scopepricing.css';
+import { useState } from 'react'
+import './scopepricing.css'
 
-const ScopePricing = ({ onNext, onBack }) => {
-  const [formData, setFormData] = useState({
-    packages: {
-      basic: {
-        name: '', description: '', deliveryTime: '', price: '',
-        revisions: 0,
-        pages: 1, afterProjectSupport: false,
-      },
-      standard: {
-        name: '', description: '', deliveryTime: '', price: '',
-        revisions: 0,
-        pages: 1, afterProjectSupport: false,
-      },
-      premium: {
-        name: '', description: '', deliveryTime: '', price: '',
-        revisions: 0,
-        pages: 1, afterProjectSupport: false,
-      },
-    },
-   
-  });
-
-  const [charCount, setCharCount] = useState({ basic: 0, standard: 0, premium: 0 });
+const ScopePricing = ({ onNext, onBack, gigData, setGigData }) => {
+  const [charCount, setCharCount] = useState({
+    basic: gigData.packages.basic.description.length,
+    standard: gigData.packages.standard.description.length,
+    premium: gigData.packages.premium.description.length,
+  })
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const [section, pkg, key] = name.split('.');
+    const { name, value, type, checked } = e.target
+    const [section, pkg, key] = name.split('.')
 
     if (section === 'packages') {
-      setFormData((prevState) => ({
-        ...prevState,
+      setGigData((prev) => ({
+        ...prev,
         packages: {
-          ...prevState.packages,
+          ...prev.packages,
           [pkg]: {
-            ...prevState.packages[pkg],
+            ...prev.packages[pkg],
             [key]: type === 'checkbox' ? checked : value,
           },
         },
-      }));
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [section]: {
-          ...prevState[section],
-          [pkg]: type === 'checkbox' ? checked : value,
-        },
-      }));
+      }))
     }
-  };
+  }
 
   const handleDescriptionChange = (pkg, e) => {
-    const newDescription = e.target.value;
-    setFormData((prevState) => ({
-      ...prevState,
+    const newDescription = e.target.value
+    setGigData((prev) => ({
+      ...prev,
       packages: {
-        ...prevState.packages,
+        ...prev.packages,
         [pkg]: {
-          ...prevState.packages[pkg],
+          ...prev.packages[pkg],
           description: newDescription,
         },
       },
-    }));
-    setCharCount((prev) => ({ ...prev, [pkg]: newDescription.length }));
-  };
+    }))
+    setCharCount((prev) => ({ ...prev, [pkg]: newDescription.length }))
+  }
 
   return (
     <div className="scope-container">
@@ -89,8 +64,8 @@ const ScopePricing = ({ onNext, onBack }) => {
                   <input
                     type="text"
                     maxLength={50}
-                    name={`packages.${pkg}.name`}
-                    value={formData.packages[pkg].name}
+                    name={`packages.${pkg}.packageName`}
+                    value={gigData.packages[pkg].packageName}
                     onChange={handleChange}
                     placeholder="Name your package"
                   />
@@ -105,7 +80,7 @@ const ScopePricing = ({ onNext, onBack }) => {
                   <textarea
                     className="descBox"
                     name={`packages.${pkg}.description`}
-                    value={formData.packages[pkg].description}
+                    value={gigData.packages[pkg].description}
                     onChange={(e) => handleDescriptionChange(pkg, e)}
                     maxLength={1200}
                     placeholder="Describe your offering"
@@ -115,19 +90,22 @@ const ScopePricing = ({ onNext, onBack }) => {
               ))}
             </tr>
 
-            {["price", "deliveryTime", "revisions", "pages"].map((field) => (
+            {['price', 'deliveryTime', 'revisions', 'numberOfPages'].map((field) => (
               <tr key={field}>
                 <td>
-                  {field === 'price' ? 'Price ($)' :
-                   field === 'deliveryTime' ? 'Delivery Time (days)' :
-                   field === 'revisions' ? 'Revisions' : 'Number of Pages'}
+                  {{
+                    price: 'Price ($)',
+                    deliveryTime: 'Delivery Time (days)',
+                    revisions: 'Revisions',
+                    numberOfPages: 'Number of Pages',
+                  }[field]}
                 </td>
                 {['basic', 'standard', 'premium'].map((pkg) => (
                   <td key={`${field}-${pkg}`}>
                     <input
                       type="number"
                       name={`packages.${pkg}.${field}`}
-                      value={formData.packages[pkg][field]}
+                      value={gigData.packages[pkg][field]}
                       onChange={handleChange}
                       min="0"
                     />
@@ -136,33 +114,29 @@ const ScopePricing = ({ onNext, onBack }) => {
               </tr>
             ))}
 
-            {["afterProjectSupport"].map((field) => (
-              <tr key={field}>
-                <td>{field.replace(/([A-Z])/g, ' $1')}</td>
-                {['basic', 'standard', 'premium'].map((pkg) => (
-                  <td key={`${field}-${pkg}`}>
-                    <input
-                      type="checkbox"
-                      name={`packages.${pkg}.${field}`}
-                      checked={formData.packages[pkg][field]}
-                      onChange={handleChange}
-                    />
-                  </td>
-                ))}
-              </tr>
-            ))}
+            <tr>
+              <td>After Project Support</td>
+              {['basic', 'standard', 'premium'].map((pkg) => (
+                <td key={`support-${pkg}`}>
+                  <input
+                    type="checkbox"
+                    name={`packages.${pkg}.afterProjectSupport`}
+                    checked={gigData.packages[pkg].afterProjectSupport}
+                    onChange={handleChange}
+                  />
+                </td>
+              ))}
+            </tr>
           </tbody>
         </table>
       </div>
-
-      
 
       <div className="submit-container">
         <button className="back-btn" onClick={onBack}>Back</button>
         <button className="submit-btn" onClick={onNext}>Save & Continue</button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ScopePricing;
+export default ScopePricing

@@ -8,54 +8,58 @@ import ScopePricing from "./ScopePricing/ScopePricing";
 import DescriptionEditor from "./DescriptionEditor/DescriptionEditor";
 import GigGallery from "./GigGallery/GigGallery";
 import PublishGig from "./PublishGig/PublishGig";
+import { useSelector } from "react-redux";
 
 const steps = ["Overview", "Pricing", "Description", "Gallery", "Publish"];
 
+  
 const Navbar = () => {
   const [activeStep, setActiveStep] = useState(0);
-
+ const user = useSelector((state) => state.user);
   // Central gig data state
-  const [gigData, setGigData] = useState({
-    gigTitle: "",
-    category: "",
-    subcategory: "",
-    searchTag: "",
-    positiveKeywords: [],
-    packages: {
-      basic: {
-        packageName: "",
-        description: "",
-        price: 0,
-        deliveryTime: 0,
-        revisions: 0,
-        numberOfPages: 0,
-        afterProjectSupport: false,
-      },
-      standard: {
-        packageName: "",
-        description: "",
-        price: 0,
-        deliveryTime: 0,
-        revisions: 0,
-        numberOfPages: 0,
-        afterProjectSupport: false,
-      },
-      premium: {
-        packageName: "",
-        description: "",
-        price: 0,
-        deliveryTime: 0,
-        revisions: 0,
-        numberOfPages: 0,
-        afterProjectSupport: false,
-      },
+ const [gigData, setGigData] = useState({
+  userId: user._id || " ",
+  gigTitle: "",
+  category: "",
+  subcategory: "",
+  searchTag: "",
+  positiveKeywords: [],
+  packages: {
+    basic: {
+      name: "",                    // ✅ was packageName
+      description: "",
+      price: 0,
+      deliveryTime: 0,
+      revisions: 0,
+      pages: 1,                    // ✅ was numberOfPages
+      afterProjectSupport: false,
     },
-    gigDescription: "",
-    hourlyRate: 0,
-    images: [],
-    videoIframes: [],
-    pdf: "",
-  });
+    standard: {
+      name: "",
+      description: "",
+      price: 0,
+      deliveryTime: 0,
+      revisions: 0,
+      pages: 1,
+      afterProjectSupport: false,
+    },
+    premium: {
+      name: "",
+      description: "",
+      price: 0,
+      deliveryTime: 0,
+      revisions: 0,
+      pages: 1,
+      afterProjectSupport: false,
+    },
+  },
+  gigDescription: "",
+  hourlyRate: 0,
+  images: [],
+  videoIframes: [],
+  pdf: "",
+});
+
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
