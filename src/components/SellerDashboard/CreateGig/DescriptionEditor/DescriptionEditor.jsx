@@ -8,12 +8,12 @@ const DescriptionEditor = ({ onNext, onBack, gigData, setGigData }) => {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    // Initialize content editable div from gigData.gigDescription on mount
-    if (editorRef.current) {
+    // Set initial description only once
+    if (editorRef.current && !editorRef.current.innerText.trim()) {
       editorRef.current.innerText = gigData.gigDescription || "";
       setCharCount((gigData.gigDescription || "").length);
     }
-  }, [gigData.gigDescription]);
+  }, []); // ✅ run only once on mount
 
   const handleContentChange = (e) => {
     const text = e.currentTarget.innerText;
@@ -24,12 +24,10 @@ const DescriptionEditor = ({ onNext, onBack, gigData, setGigData }) => {
   const handleHourlyRateChange = (e) => {
     const value = e.target.value;
     const numericValue = Number(value);
-    if (!isNaN(numericValue)) {
-      setGigData((prev) => ({ ...prev, hourlyRate: numericValue }));
-    } else {
-      // If invalid input, set zero or ignore
-      setGigData((prev) => ({ ...prev, hourlyRate: 0 }));
-    }
+    setGigData((prev) => ({
+      ...prev,
+      hourlyRate: isNaN(numericValue) ? 0 : numericValue,
+    }));
   };
 
   return (
@@ -63,11 +61,14 @@ const DescriptionEditor = ({ onNext, onBack, gigData, setGigData }) => {
           className="editor-box"
           contentEditable
           id="gig-desc"
-          placeholder="Type your gig description here..."
           onInput={handleContentChange}
           ref={editorRef}
           suppressContentEditableWarning={true}
-          style={{ minHeight: "150px", border: "1px solid #ccc", padding: "8px" }}
+          style={{
+            minHeight: "150px",
+            border: "1px solid #ccc",
+            padding: "8px",
+          }}
         ></div>
 
         <div className="char-count">{charCount}/1200 Characters</div>

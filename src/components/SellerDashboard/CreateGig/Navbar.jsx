@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./navbar.css";
 
 import GigForm from "./GigForm/GigForm";
@@ -12,54 +12,57 @@ import { useSelector } from "react-redux";
 
 const steps = ["Overview", "Pricing", "Description", "Gallery", "Publish"];
 
-  
 const Navbar = () => {
   const [activeStep, setActiveStep] = useState(0);
- const user = useSelector((state) => state.user);
-  // Central gig data state
- const [gigData, setGigData] = useState({
-  userId: user._id || " ",
-  gigTitle: "",
-  category: "",
-  subcategory: "",
-  searchTag: "",
-  positiveKeywords: [],
-  packages: {
-    basic: {
-      name: "",                    // ✅ was packageName
-      description: "",
-      price: 0,
-      deliveryTime: 0,
-      revisions: 0,
-      pages: 1,                    // ✅ was numberOfPages
-      afterProjectSupport: false,
-    },
-    standard: {
-      name: "",
-      description: "",
-      price: 0,
-      deliveryTime: 0,
-      revisions: 0,
-      pages: 1,
-      afterProjectSupport: false,
-    },
-    premium: {
-      name: "",
-      description: "",
-      price: 0,
-      deliveryTime: 0,
-      revisions: 0,
-      pages: 1,
-      afterProjectSupport: false,
-    },
-  },
-  gigDescription: "",
-  hourlyRate: 0,
-  images: [],
-  videoIframes: [],
-  pdf: "",
-});
+  const user = useSelector((state) => state.user);
+  const [gigData, setGigData] = useState(null);
 
+  useEffect(() => {
+    if (user?._id) {
+      setGigData({
+        userId: user._id,
+        gigTitle: "",
+        category: "",
+        subcategory: "",
+        searchTag: "",
+        positiveKeywords: [],
+        packages: {
+          basic: {
+            name: "",
+            description: "",
+            price: 0,
+            deliveryTime: 0,
+            revisions: 0,
+            pages: 1,
+            afterProjectSupport: false,
+          },
+          standard: {
+            name: "",
+            description: "",
+            price: 0,
+            deliveryTime: 0,
+            revisions: 0,
+            pages: 1,
+            afterProjectSupport: false,
+          },
+          premium: {
+            name: "",
+            description: "",
+            price: 0,
+            deliveryTime: 0,
+            revisions: 0,
+            pages: 1,
+            afterProjectSupport: false,
+          },
+        },
+        gigDescription: "",
+        hourlyRate: 0,
+        images: [],
+        videoIframes: [],
+        pdf: "",
+      });
+    }
+  }, [user]);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -80,6 +83,8 @@ const Navbar = () => {
       });
     }
   };
+
+  if (!gigData) return <div>Loading...</div>; // Optional: Loading state while user loads
 
   const stepComponents = [
     <GigForm
@@ -135,7 +140,9 @@ const Navbar = () => {
         </ul>
       </nav>
 
-      <main className="create-gig-main-container">{stepComponents[activeStep]}</main>
+      <main className="create-gig-main-container">
+        {stepComponents[activeStep]}
+      </main>
     </div>
   );
 };

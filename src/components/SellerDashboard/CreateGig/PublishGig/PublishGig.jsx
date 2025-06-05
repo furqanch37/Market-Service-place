@@ -64,13 +64,13 @@ const PublishGig = ({ onBack, gigData }) => {
       formData.append("packages", JSON.stringify(formattedPackages));
 
       // Images
-      gigData.images.forEach((file) => {
-        formData.append("gigImages", file);
-      });
+      gigData.images.forEach((imageObj) => {
+  formData.append("gigImages", imageObj.file); // ✅ this is the actual File
+});
 
       // PDF
       if (gigData.pdf) {
-        formData.append("pdf", gigData.pdf);
+        formData.append("gigPdf", gigData.pdf);
       }
 
       // Debug FormData

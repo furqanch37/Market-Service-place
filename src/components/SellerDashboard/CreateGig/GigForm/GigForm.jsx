@@ -1,22 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./gigform.css";
 
 const GigForm = ({ onNext, gigData, setGigData }) => {
-  // Update handler for inputs
+  const [positiveKeywordsInput, setPositiveKeywordsInput] = useState("");
+
+  useEffect(() => {
+    setPositiveKeywordsInput(gigData.positiveKeywords.join(", "));
+  }, [gigData.positiveKeywords]);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
+    setGigData((prev) => ({ ...prev, [id]: value }));
+  };
 
-    if (id === "positiveKeywords" || id === "searchTag") {
-      // Save as array splitting by comma
-      const keywords = value.split(",").map((k) => k.trim()).filter(Boolean);
-      if (id === "positiveKeywords")
-        setGigData((prev) => ({ ...prev, positiveKeywords: keywords }));
-      else setGigData((prev) => ({ ...prev, searchTag: value }));
-    } else {
-      setGigData((prev) => ({ ...prev, [id]: value }));
-    }
+  const handlePositiveKeywordsChange = (e) => {
+    const input = e.target.value;
+    setPositiveKeywordsInput(input);
+    const keywords = input
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0);
+    setGigData((prev) => ({ ...prev, positiveKeywords: keywords }));
   };
 
   return (
@@ -52,9 +58,10 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             <option value="">Select a Category</option>
             <option value="Web Development">Web Development</option>
             <option value="Graphic Design">Graphic Design</option>
-            {/* Add your actual categories here */}
+            {/* Add more categories as needed */}
           </select>
         </div>
+
         <div>
           <label htmlFor="subcategory" className="form-label">
             Subcategory
@@ -68,7 +75,7 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             <option value="">Select a Subcategory</option>
             <option value="Fullstack">Fullstack</option>
             <option value="Frontend">Frontend</option>
-            {/* Add your actual subcategories here */}
+            {/* Add more subcategories as needed */}
           </select>
         </div>
       </div>
@@ -87,6 +94,7 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             onChange={handleChange}
           />
         </div>
+
         <div>
           <label htmlFor="positiveKeywords" className="form-label">
             Positive keywords (comma separated)
@@ -96,15 +104,14 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             id="positiveKeywords"
             className="form-input"
             placeholder="e.g., professional, clean"
-            value={gigData.positiveKeywords.join(", ")}
-            onChange={handleChange}
+            // value={positiveKeywordsInput}
+            onChange={handlePositiveKeywordsChange}
           />
         </div>
       </div>
 
       <p className="note-text">
-        ⚠️ Please note: Some categories require that sellers verify their
-        skills.
+        ⚠️ Please note: Some categories require that sellers verify their skills.
       </p>
 
       <div className="submit-container-1">
