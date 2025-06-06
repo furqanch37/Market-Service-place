@@ -1,12 +1,42 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Services.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { baseUrl } from '@/const';
 
-const Services = () => {
+const Services = ({ userId }) => {
   const router = useRouter();
+  const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+  const [gigData, setGigData] = useState([]);
+
+  const toggleDropdown = (index) => {
+    setOpenDropdownIndex((prev) => (prev === index ? null : index));
+  };
+
+  useEffect(() => {
+    const fetchGigs = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/gigs/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${token}` // Uncomment if using token-based auth
+          },
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch gigs');
+        const data = await res.json();
+        setGigData(data?.gigs || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (userId) fetchGigs();
+  }, [userId]);
+
   return (
     <div className="services-container">
       <div className="services-header">
@@ -15,11 +45,15 @@ const Services = () => {
           <span>Accepting Custom Orders</span>
           <div className="toggle-switch active"></div>
         </div>
-        <Link href="/seller/create-gig"><button className="create-gig-btn">CREATE A NEW GIG</button></Link>
+        <Link href="/seller/create-gig">
+          <button className="create-gig-btn">CREATE A NEW GIG</button>
+        </Link>
       </div>
 
       <div className="tabs">
-        <span className="tab active">ACTIVE <span className="badge">8</span></span>
+        <span className="tab active">
+          ACTIVE <span className="badge">{gigData.length}</span>
+        </span>
         <span className="tab">PENDING APPROVAL</span>
         <span className="tab">REQUIRES MODIFICATION</span>
         <span className="tab">DRAFT</span>
@@ -46,39 +80,45 @@ const Services = () => {
             <span className="col">PLANS</span>
           </div>
 
-          {/* Row 1 */}
-          <div className="gigs-row" onClick={()=> router.push('/services-details')} style={{cursor:'pointer'}}>
-            <input type="checkbox" />
-            <div className="col-gig">
-              <Image src="/assets/gigs/dummy.png" width={40} height={35} alt="Gig 2" style={{objectFit:'contain'}} />
-              <div>
-                <p className="gig-title">build a portfolio website, business website with animations</p>
+          {gigData.map((gig, index) => (
+            <div className="gigs-row" key={gig._id || index} style={{ cursor: 'pointer' }}>
+              <input type="checkbox" />
+              <div className="col-gig" onClick={() => router.push(`/services-details/${gig._id}`)}>
+                <Image
+                  src={gig.coverImage || '/assets/gigs/dummy.png'}
+                  width={40}
+                  height={35}
+                  alt="Gig"
+                  style={{ objectFit: 'contain' }}
+                />
+                <div>
+                  <p className="gig-title">{gig.title}</p>
+                </div>
+              </div>
+              <span className="col">{gig.impressions ?? 0}</span>
+              <span className="col">{gig.clicks ?? 0}</span>
+              <span className="col">{gig.orders ?? 0}</span>
+              <span className="col">{gig.cancellations ?? '0%'}</span>
+              <span className="col plan-action">+ Add Subscription</span>
+              <div className="dropdown-wrapper">
+                <button
+                  className="dropdown-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown(index);
+                  }}
+                >
+                  ▼
+                </button>
+                {openDropdownIndex === index && (
+                  <div className="dropdown-menu">
+                    <button>Update</button>
+                    <button>Delete</button>
+                  </div>
+                )}
               </div>
             </div>
-            <span className="col">291</span>
-            <span className="col">0</span>
-            <span className="col">0</span>
-            <span className="col">0%</span>
-            <span className="col plan-action">+ Add Subscription</span>
-            <button className="dropdown-btn">▼</button>
-          </div>
-
-          {/* Row 2 */}
-          <div className="gigs-row" onClick={()=> router.push('/services-details')} style={{cursor:'pointer'}}>
-            <input type="checkbox" />
-            <div className="col-gig">
-              <Image src="/assets/gigs/dummy.png" width={40} height={35} alt="Gig 2" style={{objectFit:'contain'}} />
-              <div>
-                <p className="gig-title">be your node js developer, react js or next js developer</p>
-              </div>
-            </div>
-            <span className="col">58</span>
-            <span className="col">0</span>
-            <span className="col">0</span>
-            <span className="col">0%</span>
-            <span className="col plan-action">+ Add Subscription</span>
-            <button className="dropdown-btn">▼</button>
-          </div>
+          ))}
         </div>
       </div>
     </div>
