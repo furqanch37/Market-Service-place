@@ -1,37 +1,70 @@
+'use client';
 import Image from "next/image";
 import styles from "./GigDetails.module.css";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { baseUrl } from "@/const";
 
 const GigDetails = () => {
+  const searchParams = useSearchParams();
+  const gigId = searchParams.get("gigId");
+  const seller = searchParams.get("seller");
+const [selectedPackage, setSelectedPackage] = useState('basic');
+  const [gig, setGig] = useState(null);
+ const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (gigId) {
+      fetch(`${baseUrl}/gigs/getGigById/${gigId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) setGig(data.gig);
+          setUser(data.user);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching gig:", err);
+          setLoading(false);
+        });
+    }
+  }, [gigId]);
+
+  if (loading) return <p>Loading gig details...</p>;
+  if (!gig) return <p>No gig found</p>;
+const pkg = gig?.packages?.[selectedPackage];
+ 
   return (
     <div className={styles.containerGigDetails}>
       <nav className={styles.breadcrumb}>
-        <span>🏠 / Programming & Tech</span> / <span>Software Development</span> / <span>Web Application</span>
+        <span>🏠 / {gig.category}</span> / <span>{gig.subcategory}</span>
       </nav>
 
       <h1 className={styles.title}>
-        I will create a personal portfolio website or business website
+        {gig.gigTitle}
       </h1>
 
       <div className={styles.sellerInfo}>
-        <Image src="/assets/gigs/avatar.png" alt="Hossain Rabbi" width={50} height={50} className={styles.profileImage} />
+        <Image src={user.profileUrl} alt="Hossain Rabbi" width={50} height={50} className={styles.profileImage} />
         <div>
-          <strong>Hossain Rabbi</strong> <span className={styles.level}>Level 1</span>
-          <div className={styles.rating}>★★★★★ <span>(37 reviews)</span></div>
+          <strong>{user.firstName} {user.lastName}</strong> <span className={styles.level}>New seller</span>
+          <div className={styles.rating}>★★★★★ <span>(No reviews)</span></div>
         </div>
       </div>
 
       <div className={styles.mainContent}>
         <div className={styles.leftContent}>
           <div className={styles.imageSlider}>
-            <Image src="/assets/gigs/dummy.png" alt="Gig Image" width={800} height={500} className={styles.gigheaderImage} />
+            <Image src={gig.images?.[0]?.url} alt="Gig Image" width={800} height={500} className={styles.gigheaderImage} />
           </div>
 
           <section className={styles.aboutSection}>
             <h2>About this gig</h2>
-            <h3>Personal Portfolio Website & Business Website | 100+ Projects Completed</h3>
+            <h3>{gig.gigTitle} | No Projects Completed</h3>
             <p>
-              Looking for a <strong>stunning personal portfolio website</strong> or a <strong>professional business presence online</strong>?
+           {gig.gigDescription}
             </p>
+         <h5 style={{margin:'15px 0', fontSize:'17px'}}>About Seller</h5>
             <p>
               Hi, I'm Hossain, a <strong>skilled web developer</strong> with <strong>7+ years of experience</strong> and <strong>100+ successful projects</strong> delivered. I specialize in creating <strong>SEO-optimized, W3-validated, and fully responsive</strong> digital platforms.
             </p>
@@ -39,77 +72,54 @@ const GigDetails = () => {
 
           <section className={styles.techStack}>
             <div>
-              <h4>Programming language</h4>
-              <p>HTML & CSS</p>
+              <h4>Search Tag</h4>
+              <p>#{gig.searchTag}</p>
             </div>
-            <div>
-              <h4>Expertise</h4>
-              <p>Algorithms & Data structures, Debugging, Performance, Design, Source control</p>
-            </div>
-            <div>
-              <h4>Frontend framework</h4>
-              <p>React.js, Bootstrap, Semantic-UI, Tailwind CSS</p>
-            </div>
-            <div>
-              <h4>Backend framework</h4>
-              <p>Django, Express.js, Node.js, Next.js</p>
-            </div>
-          </section>
+           <div>
+  <h4>Positive Keywords</h4>
+  <p>{gig.positiveKeywords?.join(", ")}</p>
+</div>
+            </section>
 
           <section className={styles.packageComparison}>
   <h2>Compare packages</h2>
   <div className={styles.packageTable}>
+    {/* Header Row */}
     <div className={`${styles.row} ${styles.headerRow}`}>
       <div className={styles.cellSpecial}>Package</div>
-      <div className={styles.cell}>
-        <span className="pricingTitleInPackage">PKR 4,439</span><br />
-        <span className={styles.packageTitle}>GOLD</span><br />
-        <span className={styles.packageDesc}>1 page max 5 Sections + Responsive *no animations included</span>
-      </div>
-      <div className={styles.cell}>
-        <span className="pricingTitleInPackage">PKR 8,878</span><br />
-        <span className={styles.packageTitle}>DIMOND</span><br />
-        <span className={styles.packageDesc}>1 page max 8 Sections + counter + slider + basic animations</span>
-      </div>
-      <div className={styles.cell}>
-        <span className="pricingTitleInPackage">PKR 17,755</span><br />
-        <span className={styles.packageTitle}>PLATINUM</span><br />
-        <span className={styles.packageDesc}>1 page as many sections need + counter + slider + reviews + contact form + map + animations & effect</span>
-      </div>
+      {['basic', 'standard', 'premium'].map((type) => (
+        <div key={type} className={styles.cell}>
+          <span className="pricingTitleInPackage">PKR {gig.packages[type].price}</span><br />
+          <span className={styles.packageTitle}>{gig.packages[type].packageName}</span><br />
+          <span className={styles.packageDesc}>{gig.packages[type].description}</span>
+        </div>
+      ))}
     </div>
 
-    <div className={styles.row}>
-      <div className={styles.cell}>Design customization</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-    </div>
-    <div className={styles.row}>
-      <div className={styles.cell}>Content upload</div>
-      <div className={styles.cell}></div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-    </div>
-    <div className={styles.row}>
-      <div className={styles.cell}>Responsive design</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-    </div>
-    <div className={styles.row}>
-      <div className={styles.cell}>Include source code</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-    </div>
-    <div className={styles.row}>
-      <div className={styles.cell}>Detailed code comments</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-      <div className={styles.cell}>✔</div>
-    </div>
+    {/* Dynamic Feature Rows */}
+    {Object.keys(gig.packages.basic).map((key) => {
+      if (['price', 'packageName', 'description'].includes(key)) return null; // skip these already used
+
+      return (
+        <div key={key} className={styles.row}>
+          <div className={styles.cell}>
+            {key
+              .replace(/([A-Z])/g, ' $1')           // camelCase to spaced
+              .replace(/^./, str => str.toUpperCase())} {/* Capitalize first letter */}
+          </div>
+          {['basic', 'standard', 'premium'].map((type) => (
+            <div key={type} className={styles.cell}>
+              {typeof gig.packages[type][key] === 'boolean'
+                ? gig.packages[type][key] ? '✔' : ''
+                : gig.packages[type][key]}
+            </div>
+          ))}
+        </div>
+      );
+    })}
   </div>
 </section>
+
 <section className={styles.reviewsSection}>
   <h2>Reviews</h2>
 
@@ -178,41 +188,51 @@ const GigDetails = () => {
 
         </div>
 
-    <div className={styles.packageCard}>
+ <div className={styles.packageCard}>
       <div className={styles.tabs}>
-        <span>Basic</span>
-        <span>Standard</span>
-        <span className={styles.active}>Premium</span>
-      </div>
-<div className={styles.packageCardPadded}>
-      <div className={styles.price}>$165</div>
-
-      <p className={styles.subscription}>
-        Save up to 20% with <span className={styles.subscribeLink}>Subscribe to Save</span>
-      </p>
-
-      <p className={styles.desc}>
-        <strong>Mountain Package – For Pros !</strong> 5 Highly Professional
-        variations JPEG PNG + STATIONARY & SOCIAL MEDIA DESIGN + Source files for logo
-      </p>
-
-      <div className={styles.meta}>
-        <span>⏱ 3 Days Delivery</span>
-        <span>⟳ Unlimited Revisions</span>
+        {['basic', 'standard', 'premium'].map((pkgName) => (
+          <span
+            key={pkgName}
+            className={selectedPackage === pkgName ? styles.active : ''}
+            onClick={() => setSelectedPackage(pkgName)}
+          >
+            {pkgName.charAt(0).toUpperCase() + pkgName.slice(1)}
+          </span>
+        ))}
       </div>
 
-      <div className={styles.included}>
-        <span>What's Included</span>
-        <span>▾</span>
+      <div className={styles.packageCardPadded}>
+        <div className={styles.price}>${pkg.price}</div>
+
+        <p className={styles.subscription}>
+          Save up to 20% with <span className={styles.subscribeLink}>Subscribe to Save</span>
+        </p>
+
+        <p className={styles.desc}>
+          <strong>{pkg.packageName}</strong> — {pkg.description}
+        </p>
+
+        <div className={styles.meta}>
+          <span>⏱ {pkg.deliveryTime} Day{pkg.deliveryTime > 1 ? 's' : ''} Delivery</span>
+          <span>⟳ {pkg.revisions === -1 ? 'Unlimited' : `${pkg.revisions} Revisions`}</span>
+        </div>
+
+        <div className={styles.included}>
+          <span>What's Included</span>
+          <span>▾</span>
+        </div>
+
+        <button className={styles.continueBtn}>Continue →</button>
+
+        <p className={styles.compare}>Compare Packages</p>
+
+        <button className={styles.contactBtn}>Contact Seller</button>
       </div>
-
-      <button className={styles.continueBtn}>Continue →</button>
-
-      <p className={styles.compare}>Compare Packages</p>
-
-      <button className={styles.contactBtn}>Contact Seller</button>
     </div>
-      </div></div>
+  
+   
+      
+      </div>
     </div>
   );
 };

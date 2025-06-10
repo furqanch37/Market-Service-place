@@ -1,22 +1,25 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import "./PopularServices.css";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { useRef, useState, useLayoutEffect } from "react";
-
-const services = [
-  { title: "Website Development", image: "/assets/categories/website-development.png" },
-  { title: "Video Editing", image: "/assets/categories/video-editing.png" },
-  { title: "Software Development", image: "/assets/categories/software-development.png" },
-  { title: "SEO", image: "/assets/categories/seo.png" },
-  { title: "App Development", image: "/assets/categories/architecture-design.png" }
-];
+import Image from 'next/image';
+import './PopularServices.css';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import { useRef, useState, useLayoutEffect, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCategories } from '@/redux/features/categorySlice';
 
 export default function PopularServices() {
   const scrollRef = useRef(null);
+  const dispatch = useDispatch();
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
+
+  const { categories, status } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchCategories());
+    }
+  }, [status, dispatch]);
 
   const updateArrowVisibility = () => {
     const el = scrollRef.current;
@@ -30,14 +33,14 @@ export default function PopularServices() {
     const el = scrollRef.current;
     if (!el) return;
     const scrollAmount = window.innerWidth < 600 ? 150 : 300;
-    el.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   };
 
   const scrollLeft = () => {
     const el = scrollRef.current;
     if (!el) return;
     const scrollAmount = window.innerWidth < 600 ? 150 : 300;
-    el.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    el.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
   };
 
   useLayoutEffect(() => {
@@ -46,14 +49,14 @@ export default function PopularServices() {
 
     const handleScrollOrResize = () => updateArrowVisibility();
 
-    updateArrowVisibility(); // Ensure buttons render correctly on initial load
+    updateArrowVisibility();
 
-    el.addEventListener("scroll", handleScrollOrResize);
-    window.addEventListener("resize", handleScrollOrResize);
+    el.addEventListener('scroll', handleScrollOrResize);
+    window.addEventListener('resize', handleScrollOrResize);
 
     return () => {
-      el.removeEventListener("scroll", handleScrollOrResize);
-      window.removeEventListener("resize", handleScrollOrResize);
+      el.removeEventListener('scroll', handleScrollOrResize);
+      window.removeEventListener('resize', handleScrollOrResize);
     };
   }, []);
 
@@ -63,15 +66,15 @@ export default function PopularServices() {
       <div className="popular-wrapper">
         <div className="popular-scroll-container">
           <div className="popular-scroll" ref={scrollRef}>
-            {services.map((service, index) => (
-              <div className="service-card" key={index}>
+            {categories.map((category) => (
+              <div className="service-card" key={category._id}>
                 <div className="card-top">
-                  <h3>{service.title}</h3>
+                  <h3>{category.name}</h3>
                 </div>
                 <div className="card-bottom">
                   <Image
-                    src={service.image}
-                    alt={service.title}
+                    src={category.image}
+                    alt={category.name}
                     width={100}
                     height={100}
                     className="service-image"

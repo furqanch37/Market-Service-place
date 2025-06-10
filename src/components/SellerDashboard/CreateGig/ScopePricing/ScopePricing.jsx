@@ -4,6 +4,7 @@ import { useState } from 'react'
 import './scopepricing.css'
 
 const ScopePricing = ({ onNext, onBack, gigData, setGigData }) => {
+  console.log(gigData);
   const [charCount, setCharCount] = useState({
     basic: gigData.packages.basic.description.length,
     standard: gigData.packages.standard.description.length,
@@ -15,6 +16,7 @@ const ScopePricing = ({ onNext, onBack, gigData, setGigData }) => {
     const [section, pkg, key] = name.split('.')
 
     if (section === 'packages') {
+      
       setGigData((prev) => ({
         ...prev,
         packages: {
@@ -64,8 +66,8 @@ const ScopePricing = ({ onNext, onBack, gigData, setGigData }) => {
                   <input
                     type="text"
                     maxLength={50}
-                    name={`packages.${pkg}.packageName`}
-                    value={gigData.packages[pkg].packageName}
+                    name={`packages.${pkg}.name`}
+                    value={gigData.packages[pkg].name}
                     onChange={handleChange}
                     placeholder="Name your package"
                   />
@@ -90,14 +92,14 @@ const ScopePricing = ({ onNext, onBack, gigData, setGigData }) => {
               ))}
             </tr>
 
-            {['price', 'deliveryTime', 'revisions', 'numberOfPages'].map((field) => (
+            {['price', 'deliveryTime', 'revisions', 'pages'].map((field) => (
               <tr key={field}>
                 <td>
                   {{
                     price: 'Price ($)',
                     deliveryTime: 'Delivery Time (days)',
                     revisions: 'Revisions',
-                    numberOfPages: 'Number of Pages',
+                    pages: 'Number of Pages',
                   }[field]}
                 </td>
                 {['basic', 'standard', 'premium'].map((pkg) => (

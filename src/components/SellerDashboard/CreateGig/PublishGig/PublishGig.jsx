@@ -3,16 +3,22 @@
 import { baseUrl } from "@/const";
 import React, { useState } from "react";
 import "./PublishGig.css";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const PublishGig = ({ onBack, gigData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+const router = useRouter();
+ const searchParams = useSearchParams();
+  const gigId = searchParams.get("gigId");
+  const isEdit = searchParams.get("edit") === "true";
 
-  const handlePublish = async () => {
-    setLoading(true);
-    setError("");
-    setSuccess(false);
+const handlePublish = async () => {
+  
+  setLoading(true);
+  setError("");
+  setSuccess(false);
 
     try {
       const formData = new FormData();
@@ -27,7 +33,16 @@ const PublishGig = ({ onBack, gigData }) => {
       formData.append("hourlyRate", gigData.hourlyRate.toString());
 
       // JSON fields
-      formData.append("positiveKeywords", JSON.stringify(gigData.positiveKeywords));
+     formData.append(
+  "positiveKeywords",
+  JSON.stringify(
+    gigData.positiveKeywords
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0)
+  )
+);
+
       formData.append("videoIframes", JSON.stringify(gigData.videoIframes));
 
       // Packages (as a single JSON string)
@@ -83,49 +98,72 @@ const PublishGig = ({ onBack, gigData }) => {
         }
       }
 
-      const response = await fetch(`${baseUrl}/gigs/create`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
+      const endpoint = isEdit
+      ? `${baseUrl}/gigs/update/${gigId}`
+      : `${baseUrl}/gigs/create`;
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || "Failed to create gig");
-      }
+    const method = isEdit ? "PUT" : "POST";
 
-      setSuccess(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    const response = await fetch(endpoint, {
+      method,
+      body: formData,
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Failed to submit gig");
     }
-  };
+
+    setSuccess(true);
+    router.push("/seller/services");
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="publish-container">
-      <div className="publish-content">
-        <h2>Almost there...</h2>
-        <p>Let's publish your Gig and get some buyers rolling in.</p>
+  <div className="publish-content">
+    <h2>{isEdit ? "Update your Gig" : "Almost there..."}</h2>
+    <p>
+      {isEdit
+        ? "Make your final changes and update your Gig."
+        : "Let's publish your Gig and get some buyers rolling in."}
+    </p>
 
-        {error && <p style={{ color: "red" }}>Error: {error}</p>}
-        {success && <p style={{ color: "green" }}>Gig published successfully!</p>}
+    {error && <p style={{ color: "red" }}>Error: {error}</p>}
+    {success && (
+      <p style={{ color: "green" }}>
+        {isEdit ? "Gig updated successfully!" : "Gig published successfully!"}
+      </p>
+    )}
 
-        <div className="btn-div">
-          <button
-            className="publish-btn"
-            onClick={handlePublish}
-            disabled={loading || success}
-          >
-            {loading ? "Publishing..." : "Publish Gig"}
-          </button>
-          <button className="back-btn" onClick={onBack} disabled={loading}>
-            Back
-          </button>
-        </div>
-      </div>
+    <div className="btn-div">
+      <button
+        className="publish-btn"
+        onClick={handlePublish}
+        disabled={loading || success}
+      >
+        {loading
+          ? isEdit
+            ? "Updating..."
+            : "Publishing..."
+          : isEdit
+          ? "Update Gig"
+          : "Publish Gig"}
+      </button>
+      <button className="back-btn" onClick={onBack} disabled={loading}>
+        Back
+      </button>
     </div>
-  );
+  </div>
+</div>
+
+      );
 };
 
 export default PublishGig;

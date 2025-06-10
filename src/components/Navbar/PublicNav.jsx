@@ -4,6 +4,7 @@ import './Navbar.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import SubNavbar from './SubNavbar/SubNavbar';
 
 const PublicNav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -71,6 +72,8 @@ const PublicNav = () => {
           </ul>
         </div>
       )}
+
+      <SubNavbar />
     </>
   );
 };

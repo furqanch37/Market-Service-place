@@ -4,27 +4,14 @@ import React, { useState, useEffect } from "react";
 import "./gigform.css";
 
 const GigForm = ({ onNext, gigData, setGigData }) => {
-  const [positiveKeywordsInput, setPositiveKeywordsInput] = useState("");
-
-  useEffect(() => {
-    setPositiveKeywordsInput(gigData.positiveKeywords.join(", "));
-  }, [gigData.positiveKeywords]);
-
+  
+  
   const handleChange = (e) => {
     const { id, value } = e.target;
     setGigData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handlePositiveKeywordsChange = (e) => {
-    const input = e.target.value;
-    setPositiveKeywordsInput(input);
-    const keywords = input
-      .split(",")
-      .map((k) => k.trim())
-      .filter((k) => k.length > 0);
-    setGigData((prev) => ({ ...prev, positiveKeywords: keywords }));
-  };
-
+  
   return (
     <div className="gig-form-container">
       <h2 className="section-title">Gig Overview</h2>
@@ -104,8 +91,8 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             id="positiveKeywords"
             className="form-input"
             placeholder="e.g., professional, clean"
-            // value={positiveKeywordsInput}
-            onChange={handlePositiveKeywordsChange}
+           value={gigData.positiveKeywords}
+            onChange={handleChange}
           />
         </div>
       </div>

@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { MdCategory } from 'react-icons/md';
+
 import {
   FaBars,
   FaTimes,
@@ -77,6 +79,11 @@ const AdminNav = () => {
               <li>
                 <Link href="/admin/recent-transactions">
                   <FaExchangeAlt className="icon" /> <span>Transactions</span>
+                </Link>
+              </li>
+                <li>
+                <Link href="/admin/manage-categories">
+                    <MdCategory className="icon" /> <span>Categories</span>
                 </Link>
               </li>
               <li>

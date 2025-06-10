@@ -6,10 +6,6 @@ import { useRouter } from 'next/navigation';
 export default function GigCard({ data, index = 0 }) {
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push('/services-details');
-  };
-
   const fallbackData = {
     image: '/assets/gigs/dummy.png',
     avatar: '/assets/gigs/avatar.png',
@@ -23,7 +19,9 @@ export default function GigCard({ data, index = 0 }) {
   };
 
   const gig = data || fallbackData;
-
+const handleClick = () => {
+    router.push(`/services-details?gigId=${gig.gigId}`);
+  };
   return (
     <div className="gig-card" onClick={handleClick} style={{ cursor: 'pointer' }}>
       <div className="gig-image-wrapper">
