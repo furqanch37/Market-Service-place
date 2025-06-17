@@ -4,42 +4,63 @@ import './Messages.css';
 import { FaSearch, FaSlidersH } from 'react-icons/fa';
 import MessageChats from './MessageChats';
 import MessageProfile from './MessageProfile';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const Messages = () => {
-  
   const [isMobile, setIsMobile] = useState(null);
-
+  const [conversations, setConversations] = useState([]);
+  const [receiverData, setReceiverData] = useState(null);
+  const user = useSelector((state) => state.user);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const receiverId = searchParams.get('receiverId');
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-useEffect(() => {
-  const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-  checkMobile();
-  window.addEventListener("resize", checkMobile);
-  return () => window.removeEventListener("resize", checkMobile);
-}, []);
-
-if (isMobile === null) {
-  // Optionally render a loading state or nothing
-  return null;
-}
-  const handleImageClick = (e) => {
-    if (isMobile) {
-      e.stopPropagation(); // prevent container click from firing
-      router.push('/messages/profile');
+  // Fetch all user conversations
+  useEffect(() => {
+    if (user?._id) {
+      fetch(`https://backend-service-marketplace.vercel.app/api/messages/user-conversations/${user._id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setConversations(data.data);
+          }
+        });
     }
-  };
+  }, [user, receiverId]); // re-fetch if receiverId changes (new chat started)
 
-  const handleContactClick = () => {
+  // If new chat started via query param, fetch receiver details
+  useEffect(() => {
+    if (receiverId) {
+      fetch(`https://backend-service-marketplace.vercel.app/api/users/getUserById/${receiverId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setReceiverData(data.data);
+          }
+        });
+    }
+  }, [receiverId]);
+
+  const handleContactClick = (contactId) => {
     if (isMobile) {
       router.push('/messages/chat');
+    } else {
+      router.push(`/messages?receiverId=${contactId}`);
     }
   };
+
+  if (isMobile === null) return null;
 
   return (
     <div className="messages-container">
-      {/* Sidebar */}
       <div className="sidebar-messages">
         <h1 className="sidebar-title-messages">Messages</h1>
         <div className="searchBarWrapper-messages">
@@ -51,37 +72,43 @@ if (isMobile === null) {
         </div>
 
         <div className="usersInMessagesWrapper">
-          <div className="contact-messages active-messages" onClick={handleContactClick}>
-            <img
-              src="/assets/users/one.png"
-              alt="Amina"
-              onClick={handleImageClick}
-            />
-            <div className="contact-info-messages">
-              <h4>Amina Okonkwo</h4>
-              <p>Data Analyst – E-commerce Insights</p>
+          {receiverData && !conversations.some(conv => conv.participant._id === receiverId) && (
+            <div className="contact-messages active-messages" onClick={() => handleContactClick(receiverId)}>
+              <img
+                src={receiverData.profileUrl || '/assets/users/placeholder.png'}
+                alt={receiverData.firstName}
+              />
+              <div className="contact-info-messages">
+                <h4>{receiverData.firstName} {receiverData.lastName}</h4>
+                <p>Starting conversation...</p>
+              </div>
+              <span className="timestamp">Now</span>
             </div>
-            <span className="timestamp">12:02 AM</span>
-          </div>
+          )}
 
-          <div className="contact-messages" onClick={handleContactClick}>
-            <img
-              src="/assets/users/one.png"
-              alt="Amina"
-              onClick={handleImageClick}
-            />
-            <div className="contact-info-messages">
-              <h4>Amina Okonkwos</h4>
-              <p>Data Analyst – E-commerce Insights</p>
+          {conversations.map((conv) => (
+            <div
+              key={conv.conversationId}
+              className={`contact-messages ${conv.participant._id === receiverId ? 'active-messages' : ''}`}
+              onClick={() => handleContactClick(conv.participant._id)}
+            >
+              <img src={conv.participant.profileUrl || '/assets/users/placeholder.png'} alt={conv.participant.firstName} />
+              <div className="contact-info-messages">
+                <h4>{conv.participant.firstName} {conv.participant.lastName}</h4>
+                <p>{conv.lastMessage}</p>
+              </div>
+              <span className="timestamp">{new Date(conv.lastMessageCreatedAt).toLocaleTimeString()}</span>
             </div>
-            <span className="timestamp">12:02 AM</span>
-          </div>
+          ))}
         </div>
       </div>
 
-      {/* Render these only if not on mobile */}
-      {!isMobile && <MessageChats />}
-      {!isMobile && <MessageProfile />}
+      {!isMobile  && (
+        <>
+          <MessageChats senderId={user._id} receiverId={receiverId} />
+          <MessageProfile />
+        </>
+      )}
     </div>
   );
 };

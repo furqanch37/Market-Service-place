@@ -45,7 +45,7 @@ const SellerNav = () => {
              <ul className="navbar-menu">
         <Link href="/seller/dashboard" className='navLink'><li className="navbar-item">Dashboard</li>
         </Link>
-       <Link href="/buyer/orders" className='navLink'> <li className="navbar-item">Orders</li>
+       <Link href="/orders" className='navLink'> <li className="navbar-item">Orders</li>
        </Link>
        <Link href="/seller/services" className='navLink'> <li className="navbar-item">Services</li>
        </Link>
@@ -53,6 +53,8 @@ const SellerNav = () => {
        </Link>
        
        <Link href="/buyer/settings/billing" className='navLink'> <li className="navbar-item">Billing</li>
+       </Link>
+       <Link href="/seller/my-coworking-space" className='navLink'> <li className="navbar-item">My Coworking Space</li>
        </Link>
        </ul>
         </div>
@@ -134,7 +136,7 @@ const SellerNav = () => {
       <Link href="/" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Dashboard</li>
       </Link>
-      <Link href="/buyer/orders" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
+      <Link href="/orders" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Orders</li>
       </Link>
       <Link href="/seller/services" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
@@ -148,6 +150,9 @@ const SellerNav = () => {
       </Link>
       <Link href="/seller/earnings" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Earnings</li>
+      </Link>
+      <Link href="/seller/my-coworking-space" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
+        <li className="mobile-nav-item">My coworking Space</li>
       </Link>
       <Link href="/buyer/notifications" className="mobile-navLink" onClick={() => setMenuOpen(false)}>
         <li className="mobile-nav-item">Notifications</li>

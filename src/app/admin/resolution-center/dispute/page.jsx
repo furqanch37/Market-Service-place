@@ -1,75 +1,107 @@
 'use client';
-import React, { useState } from 'react';
-import { FaChevronDown, FaHashtag, FaEdit } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { FaHashtag, FaEdit } from 'react-icons/fa';
+import { FiMessageCircle } from 'react-icons/fi';
 import './disputeDetails.css';
 
 const Index = () => {
-  const [description, setDescription] = useState('');
-  const maxLength = 500;
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get('orderId');
+
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrderDetails = async () => {
+    try {
+      const res = await fetch(
+        `https://backend-service-marketplace.vercel.app/api/orders/order-by-id/${orderId}`
+      );
+      const data = await res.json();
+      if (data.success) {
+        setOrder(data.order);
+      }
+    } catch (err) {
+      console.error('Error fetching order:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (orderId) fetchOrderDetails();
+  }, [orderId]);
+
+  const handleAction = async (action) => {
+    try {
+      const res = await fetch(
+        `https://backend-service-marketplace.vercel.app/api/orders/resolution-response/${orderId}?action=${action}&userId=${order?.resolutionRequest?.requestedBy}`,
+        { method: 'GET' }
+      );
+      const data = await res.json();
+      if (data.success) {
+        alert(`Dispute ${action}ed successfully`);
+        fetchOrderDetails(); // Refresh order data
+      }
+    } catch (err) {
+      console.error(`Error performing ${action}:`, err);
+    }
+  };
+
+  if (loading) return <div className="resolution-wrapper-new">Loading...</div>;
+  if (!order) return <div className="resolution-wrapper-new">Order not found</div>;
+
+  const requester =
+    order.buyerId._id === order.resolutionRequest.requestedBy
+      ? order.buyerId
+      : order.sellerId;
 
   return (
     <div className="resolution-wrapper-new">
       <div className="resolution-card">
         <div className="ticket-no">
           <FaHashtag className="ticket-icon" />
-          Ticket No: <strong>#123456</strong>
+          Ticket No: <strong>{order.resolutionRequest.ticketId}</strong>
         </div>
 
         <h2 className="resolution-header">Dispute Resolution Details</h2>
-        <p className="resolution-description">
-          Please fill out the necessary details about this dispute. Ensure accuracy so our resolution team can assist you better.
-        </p>
+        <p className="resolution-description">{order.resolutionRequest.message}</p>
 
         <div className="resolution-section-title">
           <FaEdit className="section-icon" />
-          Dispute Resolution
+          Dispute Details
         </div>
 
-        <div className="resolution-form-row">
-          <div className="resolution-form-group">
-            <label>Resolution Title</label>
-            <input type="text" placeholder="Enter dispute title" />
-          </div>
-
-          <div className="resolution-form-group custom-select-wrapper">
-            <label>Dispute Type</label>
-            <div className="custom-select">
-              <select defaultValue="">
-                <option value="" disabled>Select Dispute Type</option>
-                <option>Payment Issue</option>
-                <option>Communication Problem</option>
-                <option>Delivery Delay</option>
-              </select>
-              <FaChevronDown className="select-icon" />
-            </div>
-          </div>
-
-          <div className="resolution-form-group custom-select-wrapper">
-            <label>Category</label>
-            <div className="custom-select">
-              <select defaultValue="">
-                <option value="" disabled>Select Category</option>
-                <option>Buyer</option>
-                <option>Seller</option>
-                <option>Platform</option>
-              </select>
-              <FaChevronDown className="select-icon" />
-            </div>
-          </div>
+        <ul className="dispute-info-list">
+          <li>
+            <strong>Status:</strong> {order.status}
+          </li>
+          <li>
+            <strong>Amount:</strong> ${order.totalAmount}
+          </li>
+          <li>
+            <strong>Reason:</strong> {order.resolutionRequest.reason}
+          </li>
+          <li>
+            <strong>Initiated By:</strong> {requester.firstName} ({requester.email})
+          </li>
+        </ul>
+{order.resolutionRequest?.status === "open" && (
+        <div className="dispute-actions">
+          <button className="resolution-submit-btn" onClick={() => handleAction('accept')}>
+            Accept Dispute
+          </button>
+          <button className="resolution-reject-btn" onClick={() => handleAction('reject')}>
+            Reject Dispute
+          </button>
+          <a
+            href={`/admin/messages?receiverId=${order.resolutionRequest.requestedBy}`}
+            className="resolution-msg-btn"
+          >
+            <FiMessageCircle /> Message Opener
+          </a>
         </div>
-
-        <div className="resolution-form-group">
-          <label>Resolution Description</label>
-          <textarea
-            placeholder="Describe the issue in detail..."
-            maxLength={maxLength}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <div className="char-count">{description.length} / {maxLength}</div>
-        </div>
-
-        <button className="resolution-submit-btn">Submit Dispute</button>
+        )}
       </div>
     </div>
   );

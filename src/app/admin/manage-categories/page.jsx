@@ -13,7 +13,6 @@ const ManageCategories = () => {
   const [subcategories, setSubcategories] = useState('');
   const [editingId, setEditingId] = useState(null);
 
-  // Fetch all categories
   const fetchCategories = async () => {
     try {
       const res = await fetch(`${baseUrl}/category/all`, { credentials: 'include' });
@@ -34,12 +33,9 @@ const ManageCategories = () => {
     formData.append('icon', icon);
     formData.append('subcategories', subcategories); // comma-separated
     if (image) formData.append('image', image);
-// Proper way to log all FormData entries
-for (const [key, value] of formData.entries()) {
-  console.log(`${key}:`, value);
-}
+
     const method = editingId ? 'PUT' : 'POST';
-    const url = editingId ? `${baseUrl}/category/update/${editingId}` : `${baseUrl}/category/create`;
+    const url = editingId ? `${baseUrl}/category/${editingId}` : `${baseUrl}/category/create`;
 
     try {
       const res = await fetch(url, {

@@ -1,23 +1,39 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '@/redux/features/categorySlice';
+import React, { useState, useRef } from 'react';
 import './SubNavbar.css';
 
-const SubNavbar = () => {
-  const dispatch = useDispatch();
-  const { categories, status, error } = useSelector((state) => state.categories);
+const categoriesData = [
+  {
+    name: 'Web, Mobile & Software Dev',
+    subcategories: ['Frontend Development', 'Backend Development', 'Mobile Apps', 'Full Stack', 'DevOps']
+  },
+  {
+    name: 'AI Services',
+    subcategories: ['AI Chatbots', 'Machine Learning', 'Data Annotation', 'Computer Vision']
+  },
+  {
+    name: 'Design & Creative',
+    subcategories: ['Logo Design', 'UI/UX', 'Game Design', 'Animation', 'Branding']
+  },
+  {
+    name: 'Writing',
+    subcategories: ['Copywriting', 'Technical Writing', 'Blogs & Articles', 'Editing', 'Proofreading']
+  },
+  {
+    name: 'Sales & Marketing',
+    subcategories: ['SEO', 'Social Media Marketing', 'Email Campaigns', 'PPC Ads']
+  },
+  {
+    name: 'More',
+    subcategories: ['Translation', 'Legal Services', 'Accounting', 'Customer Support']
+  }
+];
 
+const SubNavbar = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const timeoutRef = useRef(null);
 
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchCategories());
-    }
-  }, [dispatch, status]);
-
   const handleMouseEnter = (index) => {
+    // Cancel any pending close timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -26,19 +42,17 @@ const SubNavbar = () => {
   };
 
   const handleMouseLeave = () => {
+    // Set a delay to hide the popup
     timeoutRef.current = setTimeout(() => {
       setHoveredCategory(null);
     }, 1500);
   };
 
-  if (status === 'loading') return <div className="sub-navbar">Loading categories...</div>;
-  if (status === 'failed') return <div className="sub-navbar">Error: {error}</div>;
-
   return (
     <div className="sub-navbar">
-      {categories.map((category, index) => (
+      {categoriesData.map((category, index) => (
         <div
-          key={category._id}
+          key={index}
           className="category-item"
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseLeave={handleMouseLeave}
@@ -51,7 +65,7 @@ const SubNavbar = () => {
               onMouseLeave={handleMouseLeave}
             >
               <ul>
-                {category.subcategories?.map((sub, i) => (
+                {category.subcategories.map((sub, i) => (
                   <li key={i}>{sub}</li>
                 ))}
               </ul>

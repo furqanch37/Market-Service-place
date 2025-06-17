@@ -2,38 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import "./gigform.css";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories } from "@/redux/features/categorySlice"; // update path based on your file structure
 
 const GigForm = ({ onNext, gigData, setGigData }) => {
-  const dispatch = useDispatch();
-  const { categories, status, error } = useSelector((state) => state.categories);
-
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchCategories());
-    }
-  }, [dispatch, status]);
-
+  
+  
   const handleChange = (e) => {
     const { id, value } = e.target;
-
-    // Reset subcategory when category changes
-    if (id === "category") {
-      setGigData((prev) => ({
-        ...prev,
-        category: value,
-        subcategory: "", // reset subcategory
-      }));
-    } else {
-      setGigData((prev) => ({ ...prev, [id]: value }));
-    }
+    setGigData((prev) => ({ ...prev, [id]: value }));
   };
 
-  // Get subcategories of selected category
-  const subcategories =
-    categories.find((cat) => cat.name === gigData.category)?.subcategories || [];
-
+  
   return (
     <div className="gig-form-container">
       <h2 className="section-title">Gig Overview</h2>
@@ -63,14 +41,11 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             className="form-input"
             value={gigData.category}
             onChange={handleChange}
-            disabled={status === "loading"}
           >
             <option value="">Select a Category</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category.name}>
-                {category.name}
-              </option>
-            ))}
+            <option value="Web Development">Web Development</option>
+            <option value="Graphic Design">Graphic Design</option>
+            {/* Add more categories as needed */}
           </select>
         </div>
 
@@ -83,14 +58,11 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             className="form-input"
             value={gigData.subcategory}
             onChange={handleChange}
-            disabled={!gigData.category}
           >
             <option value="">Select a Subcategory</option>
-            {subcategories.map((subcat, idx) => (
-              <option key={idx} value={subcat}>
-                {subcat}
-              </option>
-            ))}
+            <option value="Fullstack">Fullstack</option>
+            <option value="Frontend">Frontend</option>
+            {/* Add more subcategories as needed */}
           </select>
         </div>
       </div>
@@ -119,7 +91,7 @@ const GigForm = ({ onNext, gigData, setGigData }) => {
             id="positiveKeywords"
             className="form-input"
             placeholder="e.g., professional, clean"
-            value={gigData.positiveKeywords}
+           value={gigData.positiveKeywords}
             onChange={handleChange}
           />
         </div>
