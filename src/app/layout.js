@@ -2,7 +2,7 @@ import './globals.css';
 import LayoutClientWrapper from '@/components/LayoutClientWrapper';
 import LayoutContent from '@/components/LayoutContent';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import UserInitializer from './UserInitializer'; // Make sure path is correct
+import UserInitializer from './UserInitializer'; 
 import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
