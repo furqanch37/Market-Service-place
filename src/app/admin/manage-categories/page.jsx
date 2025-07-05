@@ -35,7 +35,7 @@ const ManageCategories = () => {
     if (image) formData.append('image', image);
 
     const method = editingId ? 'PUT' : 'POST';
-    const url = editingId ? `${baseUrl}/category/${editingId}` : `${baseUrl}/category/create`;
+    const url = editingId ? `${baseUrl}/category/update/${editingId}` : `${baseUrl}/category/create`;
 
     try {
       const res = await fetch(url, {
@@ -65,7 +65,7 @@ const ManageCategories = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`${baseUrl}/category/update/${id}`, {
+      const res = await fetch(`${baseUrl}/category/delete/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });

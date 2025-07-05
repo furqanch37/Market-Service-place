@@ -26,7 +26,7 @@
 
 .message-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 12px 16px;
   border-bottom: 1px solid #f0f0f0;
   position: relative;
@@ -114,4 +114,9 @@
 }
 .bellIconNotification{
   margin-top: 13px;
+}
+
+.message-item:hover {
+  background-color: #f3f3f3; /* or use #f5f5f5 for even lighter */
+  cursor: pointer;
 }

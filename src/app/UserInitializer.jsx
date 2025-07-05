@@ -20,9 +20,15 @@ const UserInitializer = () => {
           const data = await res.json();
 
           if (res.ok && data.success) {
-            dispatch(loginUser(data.user));
+           const userWithData = {
+             ...data.user,
+             wallet: data.wallet,
+             buyerReviews: data.buyerReviews,
+             sellerReviews: data.sellerReviews,
+           };
+         
+           dispatch(loginUser(userWithData));
 
-            // 👇 Determine currentDashboard just like in login logic
             const roles = data.user.role || [];
             const rolePriority = { seller: 1, buyer: 2 };
             const validRoles = roles.filter((r) => ['seller', 'buyer'].includes(r));

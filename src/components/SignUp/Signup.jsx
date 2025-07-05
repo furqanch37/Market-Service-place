@@ -109,16 +109,18 @@ const SignupForm = () => {
 
   return (
     <div className="signup-container">
-      <h2>Sign up</h2>
+      <h2>{role !== "seller" ? "Sign up" : "Apply as Freelancer"}</h2>
 
-      <div className="social-buttons">
+     {role !== "seller" && (
+     <>  <div className="social-buttons">
         <button className="google-btn" onClick={() => googleLogin()}>
           <img src="/assets/google.jpeg" alt="Google" className="google-logo" />
           Continue with Google
         </button>
       </div>
 
-      <div className="divider"><span>or</span></div>
+      <div className="divider"><span>or</span></div></>
+     )}
 
       <form className="signup-form" onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="name-fields">
